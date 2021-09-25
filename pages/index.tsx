@@ -1,8 +1,6 @@
 import styled from 'styled-components'
 import { AuctionProvider } from 'state/auction'
-import SponsorForm from 'components/SponsorForm'
-import SponsorList from 'components/SponsorList'
-import VideoPlayer from 'components/VideoPlayer'
+import Simulator from 'components/Simulator'
 
 const Title = styled.h1`
   color: red;
@@ -14,9 +12,7 @@ export default function Home() {
     <AuctionProvider>
       <div>
         <Title>My page</Title>
-        <SponsorList />
-        <SponsorForm />
-        <VideoPlayer />
+        <Simulator />
       </div>
     </AuctionProvider>
   )
