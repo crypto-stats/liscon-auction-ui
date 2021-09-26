@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import Overlay from 'components/Overlay'
+import AuctionMetrics from 'components/AuctionMetrics'
 import SponsorForm from 'components/SponsorForm'
 import SponsorList from 'components/SponsorList'
 import VideoPlayer from 'components/VideoPlayer'
@@ -10,6 +11,8 @@ const Simulator = () => {
 
   return (
     <Fragment>
+      <AuctionMetrics />
+
       <SponsorList />
       <SponsorForm />
       <VideoPlayer>

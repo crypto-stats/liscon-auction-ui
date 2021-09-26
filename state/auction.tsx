@@ -12,6 +12,7 @@ export interface Bid {
 
 export interface AuctionState {
   lastUpdate: number
+  ethCollected: number
   activeBid: Bid | null
   bids: Bid[]
 }
@@ -24,6 +25,7 @@ interface AuctionStateWithMethods extends AuctionState {
 
 const defaultState: AuctionState = {
   lastUpdate: 0,
+  ethCollected: 0,
   activeBid: null,
   bids: [],
 }
@@ -74,6 +76,8 @@ export const AuctionProvider: React.FC = ({ children }) => {
       async update() {
         setState((currentState: AuctionState) => {
           let nextTopBid = currentState.activeBid
+          let ethCollected = currentState.ethCollected
+          const now = Date.now() / 1000
 
           if (nextTopBid && !nextTopBid.approved) {
             nextTopBid = null
@@ -90,10 +94,19 @@ export const AuctionProvider: React.FC = ({ children }) => {
             }
             if (currentState.activeBid) {
               currentState.activeBid.active = false
+
+              const amountPaid = Math.max(
+                currentState.activeBid.gweiPerSec * (now - currentState.lastUpdate) / 1e9,
+                0
+              )
+              currentState.activeBid.balance -= amountPaid
+              ethCollected += amountPaid
             }
 
             return {
               ...currentState,
+              ethCollected,
+              lastUpdate: now,
               activeBid: nextTopBid,
               bids: [...currentState.bids],
             }
