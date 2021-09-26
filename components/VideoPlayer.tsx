@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import YouTube from 'react-youtube'
 
 const Container = styled.div`
-  height: 400px;
-  width: 600px;
+  max-height: 500px;
   position: relative;
+  flex: 1;
 
   & .player-container {
     height: 100%;

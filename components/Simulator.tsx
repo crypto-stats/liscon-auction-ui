@@ -1,24 +1,52 @@
-import React, { Fragment } from 'react';
+import React from 'react'
+import styled from 'styled-components'
 import Overlay from 'components/Overlay'
 import AuctionMetrics from 'components/AuctionMetrics'
 import SponsorForm from 'components/SponsorForm'
 import SponsorList from 'components/SponsorList'
 import VideoPlayer from 'components/VideoPlayer'
 import { useAuction } from 'state/auction'
+import Panel from './Panel'
+
+const Container = styled.div`
+  display: flex;
+  flex: 1;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`
+
+const Column = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`
 
 const Simulator = () => {
   const { activeBid } = useAuction()
 
   return (
-    <Fragment>
-      <AuctionMetrics />
+    <Container>
+      <Column>
+        <Panel>
+          <AuctionMetrics />
+        </Panel>
 
-      <SponsorList />
-      <SponsorForm />
-      <VideoPlayer>
-        {activeBid && <Overlay>{activeBid.text}</Overlay>}
-      </VideoPlayer>
-    </Fragment>
+        <Panel title="Submit Sponsorship Bid">
+          <SponsorForm />
+        </Panel>
+        <Panel title="Sponsor Bids">
+          <SponsorList />
+        </Panel>
+      </Column>
+
+      <Column>
+        <VideoPlayer>
+          {activeBid && <Overlay>{activeBid.text}</Overlay>}
+        </VideoPlayer>
+      </Column>
+    </Container>
   )
 };
 

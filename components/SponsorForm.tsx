@@ -39,7 +39,7 @@ const SponsorList: React.FC = () => {
           onChange={(e: any) => setGweiPerSec(e.target.value)}
           placeholder="Gwei per second"
         />
-        ({(parseFloat(gweiPerSec) * ETH_PRICE / 1e9 * 60).toLocaleString('en-US', {
+        ({(parseFloat(gweiPerSec) || 0 * ETH_PRICE / 1e9 * 60).toLocaleString('en-US', {
           style: 'currency',
           currency: 'USD',
         })} per minute)
@@ -52,7 +52,7 @@ const SponsorList: React.FC = () => {
           onChange={(e: any) => setDeposit(e.target.value)}
           placeholder="Deposit amount"
         />
-        ({(parseFloat(deposit) * ETH_PRICE).toLocaleString('en-US', {
+        ({(parseFloat(deposit) || 0 * ETH_PRICE).toLocaleString('en-US', {
           style: 'currency',
           currency: 'USD',
         })})
