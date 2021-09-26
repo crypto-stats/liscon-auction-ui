@@ -5,7 +5,7 @@ import AuctionMetrics from 'components/AuctionMetrics'
 import SponsorForm from 'components/SponsorForm'
 import SponsorList from 'components/SponsorList'
 import VideoPlayer from 'components/VideoPlayer'
-import { useAuction } from 'state/auction'
+import { useAuction, Bid } from 'state/auction'
 import Panel from './Panel'
 
 const Container = styled.div`
@@ -24,7 +24,7 @@ const Column = styled.div`
 `
 
 const Simulator = () => {
-  const { activeBid } = useAuction()
+  const { activeBid, bids } = useAuction()
 
   return (
     <Container>
@@ -38,6 +38,9 @@ const Simulator = () => {
         </Panel>
         <Panel title="Sponsor Bids">
           <SponsorList />
+        </Panel>
+        <Panel title="Unapproved Bids">
+          <SponsorList unapproved />
         </Panel>
       </Column>
 

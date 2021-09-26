@@ -79,12 +79,27 @@ export const AuctionProvider: React.FC = ({ children }) => {
           let ethCollected = currentState.ethCollected
           const now = Date.now() / 1000
 
+          if (currentState.activeBid) {
+            let amountPaid = currentState.activeBid.gweiPerSec * (now - currentState.lastUpdate) / 1e9
+            if (amountPaid > currentState.activeBid.balance) {
+              amountPaid = currentState.activeBid.balance
+
+              currentState.activeBid.active = false
+              nextTopBid = null
+            }
+
+            currentState.activeBid.balance -= amountPaid
+            ethCollected += amountPaid
+          }
+
           if (nextTopBid && !nextTopBid.approved) {
             nextTopBid = null
           }
 
           for (const bid of currentState.bids) {
-            if (bid.approved && (!nextTopBid || bid.gweiPerSec > nextTopBid.gweiPerSec)) {
+            if (bid.approved
+              && bid.balance > 0
+              && (!nextTopBid || bid.gweiPerSec > nextTopBid.gweiPerSec)) {
               nextTopBid = bid
             }
           }
@@ -92,15 +107,8 @@ export const AuctionProvider: React.FC = ({ children }) => {
             if (nextTopBid) {
               nextTopBid.active = true
             }
-            if (currentState.activeBid) {
+            if (currentState.activeBid?.active) {
               currentState.activeBid.active = false
-
-              const amountPaid = Math.max(
-                currentState.activeBid.gweiPerSec * (now - currentState.lastUpdate) / 1e9,
-                0
-              )
-              currentState.activeBid.balance -= amountPaid
-              ethCollected += amountPaid
             }
 
             return {
