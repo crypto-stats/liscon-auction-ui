@@ -21,6 +21,8 @@ interface AuctionStateWithMethods extends AuctionState {
   addBid(owner: string, text: string, gweiPerSec: number, deposit: number): Promise<number>
   setBidApproval(id: number, approved: boolean): Promise<void>
   updateBid(id: number, gweiPerSec: number): Promise<void>
+  deposit(id: number, eth: number): Promise<void>
+  withdrawAll(id: number): Promise<void>
   update(): Promise<void>
 }
 
@@ -36,6 +38,8 @@ const AuctionContext = React.createContext<AuctionStateWithMethods>({
   async addBid() { throw new Error('Not initialized') },
   async setBidApproval() { throw new Error('Not initialized') },
   async updateBid() { throw new Error('Not initialized') },
+  async deposit() { throw new Error('Not initialized') },
+  async withdrawAll() { throw new Error('Not initialized') },
   async update() { throw new Error('Not initialized') },
 });
 
@@ -140,9 +144,13 @@ export const AuctionProvider: React.FC = ({ children }) => {
         changeBid(id, { gweiPerSec }, true)
       },
 
-      // async deposit(id: number, ethToDeposit: number) {
-      //   changeBid(id, { gweiPerSec }, true)
-      // },
+      async deposit(id: number, ethToDeposit: number) {
+        changeBid(id, (bid: Bid) => ({ ...bid, balance: bid.balance + ethToDeposit }), true)
+      },
+
+      async withdrawAll(id: number) {
+        changeBid(id, { balance: 0 }, true)
+      },
 
       async update() {
         setState(updateState)
