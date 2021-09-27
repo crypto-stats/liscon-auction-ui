@@ -7,7 +7,7 @@ export const ADMIN_ACCOUNT = '0x2222222222222222222222222222222222222222'
 const defaultState: AccountsState = {
   balances: {},
   activeAccount: USER_ACCOUNT,
-  active: false,
+  status: 'ready',
 }
 
 export const useMemoryAccounts = () => {
@@ -17,6 +17,7 @@ export const useMemoryAccounts = () => {
     ...state,
 
     async activate() {},
+    async switchChain() {},
 
     async transfer(from: string, to: string, amount: number) {
       setState((currentState: AccountsState) => {

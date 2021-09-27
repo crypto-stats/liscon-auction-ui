@@ -1,4 +1,6 @@
 import { useState, useRef } from 'react'
+import { useWeb3React } from '@web3-react/core'
+import Auction, { ARB_TESTNET } from 'web3/Auction'
 import { AuctionState, Bid } from './types'
 
 const defaultState: AuctionState = {
@@ -9,6 +11,7 @@ const defaultState: AuctionState = {
 }
 
 export const useChainAuction = () => {
+  const { library } = useWeb3React()
   const nextId = useRef(0)
   const [state, setState] = useState<AuctionState>(defaultState)
 
@@ -79,23 +82,34 @@ export const useChainAuction = () => {
       throw new Error(`Bid ${id} not found`)
     })
 
+  const getAuction = () => new Auction(library.getSigner(), ARB_TESTNET.AUCTION_ADDRESS, ARB_TESTNET.WETH_ADAPTER_ADDRESS)
+
   return {
     ...state,
 
     async addBid(owner: string, text: string, gweiPerSec: number, deposit: number) {
-      const id = nextId.current++;
-      setState((currentState: AuctionState) => ({
-        ...currentState,
-        bids: [...currentState.bids, {
-          id,
-          owner,
-          text,
-          balance: deposit,
-          gweiPerSec,
-          approved: false,
-          active: false,
-        }],
-      }))
+      const auction = getAuction()
+      const id = await auction.createSponsor({
+        campaign: 'liscon',
+        gweiPerBlock: gweiPerSec.toString(),
+        metadata: text,
+        depositAmount: deposit.toString(),
+      })
+
+      setState((currentState: AuctionState) => {
+        return {
+          ...currentState,
+          bids: [...currentState.bids, {
+            id,
+            owner,
+            text,
+            balance: deposit,
+            gweiPerSec,
+            approved: false,
+            active: false,
+          }],
+        }
+      })
       return id
     },
 

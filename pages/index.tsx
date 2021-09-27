@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
-import { AuctionProvider } from 'state/auction'
+import Providers from 'state/Providers'
 import ModeSelector from 'components/ModeSelector'
 import Simulator from 'components/Simulator'
 
@@ -42,11 +42,11 @@ export default function Home() {
   }
 
   return (
-    <AuctionProvider mode={mode}>
+    <Providers mode={mode}>
       <GlobalStyle />
       
       <Title>LisCon Stream Sponsorship</Title>
       <Simulator />
-    </AuctionProvider>
+    </Providers>
   )
 }

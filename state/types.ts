@@ -27,11 +27,12 @@ export interface AuctionStateWithMethods extends AuctionState {
 export interface AccountsState {
   balances: { [address: string]: number }
   activeAccount: string
-  active: boolean
+  status: string
 }
 
 export interface AccountsStateWithMethods extends AccountsState {
   activate(): Promise<void>
+  switchChain(): Promise<void>
   transfer(from: string, to: string, amount: number): Promise<void>
   balanceOf(address: string): Promise<number>
 }

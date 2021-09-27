@@ -5,6 +5,7 @@ import AuctionMetrics from 'components/AuctionMetrics'
 import SponsorForm from 'components/SponsorForm'
 import SponsorList from 'components/SponsorList'
 import VideoPlayer from 'components/VideoPlayer'
+import WalletConnection from 'components/WalletConnection'
 import { useAuction } from 'state/auction'
 import Panel from './Panel'
 
@@ -29,6 +30,10 @@ const Simulator = () => {
   return (
     <Container>
       <Column>
+        <Panel title="wallet">
+          <WalletConnection />
+        </Panel>
+
         <Panel>
           <AuctionMetrics />
         </Panel>

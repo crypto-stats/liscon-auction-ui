@@ -6,7 +6,7 @@ import { useChainAccounts } from './chain-accounts'
 const AuctionContext = React.createContext<AccountsStateWithMethods>({
   balances: {},
   activeAccount: '',
-  active: false,
+  status: 'inactive',
 
   async activate() { throw new Error('Not initialized') },
   async transfer() { throw new Error('Not initialized') },
