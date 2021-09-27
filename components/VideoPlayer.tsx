@@ -4,6 +4,7 @@ import YouTube from 'react-youtube'
 
 const Container = styled.div`
   max-height: 500px;
+  min-height: 200px;
   position: relative;
   flex: 1;
 

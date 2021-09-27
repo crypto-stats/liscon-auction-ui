@@ -1,5 +1,7 @@
+import React, { useState, Fragment } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { AuctionProvider } from 'state/auction'
+import ModeSelector from 'components/ModeSelector'
 import Simulator from 'components/Simulator'
 
 const Title = styled.h1`
@@ -27,8 +29,20 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export default function Home() {
+  const [mode, setMode] = useState<'memory' | 'testnet' | null>(null)
+
+  if (!mode) {
+    return (
+      <Fragment>
+        <GlobalStyle />
+
+        <ModeSelector onSelect={setMode} />
+      </Fragment>
+    )
+  }
+
   return (
-    <AuctionProvider>
+    <AuctionProvider mode={mode}>
       <GlobalStyle />
       
       <Title>LisCon Stream Sponsorship</Title>
