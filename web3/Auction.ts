@@ -34,8 +34,26 @@ export default class Auction {
 
     const { logs } = await tx.wait()
     const newSponsorEvent = this.auctionContract.interface.parseLog(logs[4])
-    console.log(newSponsorEvent)
     const { sponsor: id } = newSponsorEvent.args
     return id
+  }
+
+  async sponsorDetails(id: string) {
+    const [details, balance] = await Promise.all([
+      this.auctionContract.getSponsor(id),
+      this.auctionContract.sponsorBalance(id),
+    ])
+
+    return {
+      owner: details.owner,
+      approved: details.approved,
+      active: details.active,
+      token: details.token,
+      paymentPerBlock: details.paymentPerBlock.toString(),
+      campaign: details.campaign,
+      lastUpdated: details.lastUpdated,
+      metadata: details.metadata,
+      storedBalance: balance.storedBalance.toString(),
+    }
   }
 }

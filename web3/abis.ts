@@ -31,11 +31,13 @@ export const AUCTION_ABI = [
   'event NumberOfSlotsChanged(bytes16 indexed campaign, uint8 newNumSlots)',
   'event TreasuryWithdrawal(address indexed token, address indexed recipient, uint256 amount)',
 
+  'function oracle() external view returns (address)',
+
   `function getSponsor(bytes32 sponsorId) external view returns (
     address owner,
     bool approved,
     bool active,
-    IERC20 token,
+    address token,
     uint128 paymentPerBlock,
     bytes16 campaign,
     uint32 lastUpdated,

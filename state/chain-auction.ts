@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import Auction, { ARB_TESTNET } from 'web3/Auction'
 import { AuctionState, Bid } from './types'
@@ -12,7 +12,6 @@ const defaultState: AuctionState = {
 
 export const useChainAuction = () => {
   const { library } = useWeb3React()
-  const nextId = useRef(0)
   const [state, setState] = useState<AuctionState>(defaultState)
 
   const updateState = (currentState: AuctionState) => {
@@ -81,6 +80,30 @@ export const useChainAuction = () => {
       }
       throw new Error(`Bid ${id} not found`)
     })
+
+  const updateBids = async () => {
+    const req = await fetch('/api/auction-status')
+    const json = await req.json()
+
+    const now = Date.now() / 1000
+    const bids = json.sponsors.map((sponsor: any) => ({
+      id: sponsor.id,
+      owner: sponsor.owner,
+      text: sponsor.metadata,
+      balance: sponsor.active
+        ? sponsor.storedBalance - (sponsor.paymentPerBlock * (now - sponsor.lastUpdated)) / 1e18
+        : sponsor.storedBalance / 1e18,
+      gweiPerSec: sponsor.paymentPerBlock / 12 / 1e9,
+      approved: sponsor.approved,
+      active: sponsor.active,
+    }))
+
+    setState((currentState: AuctionState) => ({ ...currentState, bids }))
+  }
+
+  useEffect(() => {
+    updateBids()
+  }, [])
 
   const getAuction = () => new Auction(library.getSigner(), ARB_TESTNET.AUCTION_ADDRESS, ARB_TESTNET.WETH_ADAPTER_ADDRESS)
 
