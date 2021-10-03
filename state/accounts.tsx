@@ -11,6 +11,7 @@ const AuctionContext = React.createContext<AccountsStateWithMethods>({
   async activate() { throw new Error('Not initialized') },
   async transfer() { throw new Error('Not initialized') },
   async balanceOf() { throw new Error('Not initialized') },
+  async switchChain() { throw new Error('Not initialized') },
 });
 
 export const useAccounts = () => useContext(AuctionContext)

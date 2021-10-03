@@ -4,6 +4,7 @@ import { ethers, Contract } from 'ethers'
 export const ARB_TESTNET = {
   AUCTION_ADDRESS: '0x205c7ba994Fb43b11d35f13495C19204e1712de9',
   WETH_ADAPTER_ADDRESS: '0x0edA9ee4eAd2c5CB5A5C7CD1728B3014F3Fe7c55',
+  WETH_ADDRESS: '0xB47e6A5f8b33b3F17603C83a0535A9dcD7E32681',
 }
 
 export default class Auction {
@@ -55,5 +56,37 @@ export default class Auction {
       metadata: details.metadata,
       storedBalance: balance.storedBalance.toString(),
     }
+  }
+
+  async ethCollected() {
+    const paymentWei = await this.auctionContract.paymentCollected(ARB_TESTNET.WETH_ADDRESS)
+    return ethers.utils.formatEther(paymentWei)
+  }
+
+  async setBidApproval(id: string, approved: boolean) {
+    const tx = await this.auctionContract.setApproved(id, approved)
+    await tx.wait()
+  }
+
+  async updateBid(id: string, gweiPerBlock: string) {
+    const weiPerBlock = ethers.utils.parseUnits(gweiPerBlock, 'gwei')
+    const tx = await this.auctionContract.updateBid(id, ARB_TESTNET.WETH_ADDRESS, weiPerBlock)
+    await tx.wait()
+  }
+
+  async deposit(campaignId: string, ethToDeposit: string) {
+    const tx = await this.wethAdapterContract.deposit(campaignId, {
+      value: ethers.utils.parseEther(ethToDeposit),
+    })
+    await tx.wait()
+  }
+
+  async withdrawAll(campaignId: string) {
+    const tx = await this.auctionContract.withdraw(
+      campaignId,
+      ethers.utils.parseEther('99999999'), // If withdrawing more than balance, it will withdraw all
+      await this.auctionContract.signer.getAddress(),
+    )
+    await tx.wait()
   }
 }

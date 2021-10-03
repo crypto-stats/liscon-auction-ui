@@ -31,14 +31,17 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
   const { data } = await req.json()
 
   const sponsors = await Promise.all(data.sponsors.map(async (sponsor: any) => {
-    const details = auction.sponsorDetails(sponsor.id)
-    return details
+    const details = await auction.sponsorDetails(sponsor.id)
+    return { id: sponsor.id, ...details }
   }))
+
+  const ethCollected = await auction.ethCollected()
 
   res.setHeader('Cache-Control', 'max-age=0, s-maxage=5, stale-while-revalidate');
   res.json({
     success: true,
     sponsors,
+    ethCollected,
     // total,
     // totalUSD,
     // yesterday,

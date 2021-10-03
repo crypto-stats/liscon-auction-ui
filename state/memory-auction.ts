@@ -58,7 +58,7 @@ export const useMemoryAuction = () => {
     }
   }
 
-  const changeBid = (id: number, update: any, withUpdate?: boolean) =>
+  const changeBid = (id: string, update: any, withUpdate?: boolean) =>
     setState((currentState: AuctionState) => {
       for (const i in currentState.bids) {
         const _state = withUpdate ? updateState(currentState) : currentState
@@ -83,7 +83,7 @@ export const useMemoryAuction = () => {
     ...state,
 
     async addBid(owner: string, text: string, gweiPerSec: number, deposit: number) {
-      const id = nextId.current++;
+      const id = (nextId.current++).toString()
       setState((currentState: AuctionState) => ({
         ...currentState,
         bids: [...currentState.bids, {
@@ -99,19 +99,19 @@ export const useMemoryAuction = () => {
       return id
     },
 
-    async setBidApproval(id: number, approved: boolean) {
+    async setBidApproval(id: string, approved: boolean) {
       changeBid(id, { approved })
     },
 
-    async updateBid(id: number, gweiPerSec: number) {
+    async updateBid(id: string, gweiPerSec: number) {
       changeBid(id, { gweiPerSec }, true)
     },
 
-    async deposit(id: number, ethToDeposit: number) {
+    async deposit(id: string, ethToDeposit: number) {
       changeBid(id, (bid: Bid) => ({ ...bid, balance: bid.balance + ethToDeposit }), true)
     },
 
-    async withdrawAll(id: number) {
+    async withdrawAll(id: string) {
       changeBid(id, { balance: 0 }, true)
     },
 

@@ -54,6 +54,7 @@ export const AUCTION_ABI = [
     uint128 paymentPerBlock,
     uint128 paymentPerBlockInETH
   )`,
+  'function paymentCollected(address token) external view returns (uint256)',
 
   // Sponsor functions
   `function createSponsor(

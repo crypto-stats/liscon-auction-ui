@@ -1,5 +1,5 @@
 export interface Bid {
-  id: number
+  id: string
   owner: string
   text: string
   gweiPerSec: number
@@ -16,11 +16,11 @@ export interface AuctionState {
 }
 
 export interface AuctionStateWithMethods extends AuctionState {
-  addBid(owner: string, text: string, gweiPerSec: number, deposit: number): Promise<number>
-  setBidApproval(id: number, approved: boolean): Promise<void>
-  updateBid(id: number, gweiPerSec: number): Promise<void>
-  deposit(id: number, eth: number): Promise<void>
-  withdrawAll(id: number): Promise<void>
+  addBid(owner: string, text: string, gweiPerSec: number, deposit: number): Promise<string>
+  setBidApproval(id: string, approved: boolean): Promise<void>
+  updateBid(id: string, gweiPerSec: number): Promise<void>
+  deposit(id: string, eth: number): Promise<void>
+  withdrawAll(id: string): Promise<void>
   update(): Promise<void>
 }
 

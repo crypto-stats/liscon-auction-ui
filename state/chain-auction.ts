@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import Auction, { ARB_TESTNET } from 'web3/Auction'
-import { AuctionState, Bid } from './types'
+import { AuctionState, /*Bid*/ } from './types'
 
 const defaultState: AuctionState = {
   lastUpdate: 0,
@@ -60,27 +60,6 @@ export const useChainAuction = () => {
     }
   }
 
-  const changeBid = (id: number, update: any, withUpdate?: boolean) =>
-    setState((currentState: AuctionState) => {
-      for (const i in currentState.bids) {
-        const _state = withUpdate ? updateState(currentState) : currentState
-
-        if (_state.bids[i].id === id) {
-          const newBid = typeof update === 'function'
-            ? update(state.bids[i])
-            : { ...state.bids[i], ...update }
-
-          _state.bids[i] = newBid
-
-          const activeBid = _state.activeBid?.id === id
-            ? newBid
-            : _state.activeBid
-          return { ..._state, activeBid }
-        }
-      }
-      throw new Error(`Bid ${id} not found`)
-    })
-
   const updateBids = async () => {
     const req = await fetch('/api/auction-status')
     const json = await req.json()
@@ -136,20 +115,28 @@ export const useChainAuction = () => {
       return id
     },
 
-    async setBidApproval(id: number, approved: boolean) {
-      changeBid(id, { approved })
+    async setBidApproval(id: string, approved: boolean) {
+      const auction = getAuction()
+      await auction.setBidApproval(id, approved)
+      await updateBids()
     },
 
-    async updateBid(id: number, gweiPerSec: number) {
-      changeBid(id, { gweiPerSec }, true)
+    async updateBid(id: string, gweiPerSec: number) {
+      const auction = getAuction()
+      await auction.updateBid(id, gweiPerSec.toString())
+      await updateBids()
     },
 
-    async deposit(id: number, ethToDeposit: number) {
-      changeBid(id, (bid: Bid) => ({ ...bid, balance: bid.balance + ethToDeposit }), true)
+    async deposit(id: string, ethToDeposit: number) {
+      const auction = getAuction()
+      await auction.deposit(id, ethToDeposit.toString())
+      await updateBids()
     },
 
-    async withdrawAll(id: number) {
-      changeBid(id, { balance: 0 }, true)
+    async withdrawAll(id: string) {
+      const auction = getAuction()
+      await auction.withdrawAll(id)
+      await updateBids()
     },
 
     async update() {
