@@ -3,10 +3,8 @@ import styled from 'styled-components'
 import YouTube from 'react-youtube'
 
 const Container = styled.div`
-  max-height: 500px;
-  min-height: 200px;
   position: relative;
-  flex: 1;
+  aspect-ratio: 16 / 9;
 
   & .player-container {
     height: 100%;
