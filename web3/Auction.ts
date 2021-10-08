@@ -2,9 +2,15 @@ import { AUCTION_ABI, WETH_ADAPTER_ABI } from './abis'
 import { ethers, Contract } from 'ethers'
 
 export const ARB_TESTNET = {
-  AUCTION_ADDRESS: '0x205c7ba994Fb43b11d35f13495C19204e1712de9',
-  WETH_ADAPTER_ADDRESS: '0x0edA9ee4eAd2c5CB5A5C7CD1728B3014F3Fe7c55',
+  AUCTION_ADDRESS: '0x582d2093452A0Cf9AB354Ae272aF4bAC507cb0ef',
+  WETH_ADAPTER_ADDRESS: '0xef1C8F5A7Ae6A28552c74be6F40e7bf32Ae4f2F1',
   WETH_ADDRESS: '0xB47e6A5f8b33b3F17603C83a0535A9dcD7E32681',
+}
+
+export const KOVAN = {
+  AUCTION_ADDRESS: '0x7c826C44344aD49dd3Cf67A79aF99dB585939da6',
+  WETH_ADAPTER_ADDRESS: '0xa0fCe843266b5F0B4d5a02A25b62a549bfDB1d53',
+  WETH_ADDRESS: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 }
 
 export default class Auction {
@@ -59,7 +65,7 @@ export default class Auction {
   }
 
   async ethCollected() {
-    const paymentWei = await this.auctionContract.paymentCollected(ARB_TESTNET.WETH_ADDRESS)
+    const paymentWei = await this.auctionContract.paymentCollected(KOVAN.WETH_ADDRESS)
     return ethers.utils.formatEther(paymentWei)
   }
 
@@ -70,7 +76,7 @@ export default class Auction {
 
   async updateBid(id: string, gweiPerBlock: string) {
     const weiPerBlock = ethers.utils.parseUnits(gweiPerBlock, 'gwei')
-    const tx = await this.auctionContract.updateBid(id, ARB_TESTNET.WETH_ADDRESS, weiPerBlock)
+    const tx = await this.auctionContract.updateBid(id, KOVAN.WETH_ADDRESS, weiPerBlock)
     await tx.wait()
   }
 
