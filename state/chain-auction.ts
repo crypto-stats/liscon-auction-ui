@@ -70,9 +70,9 @@ export const useChainAuction = () => {
       owner: sponsor.owner,
       text: sponsor.metadata,
       balance: sponsor.active
-        ? sponsor.storedBalance - (sponsor.paymentPerBlock * (now - sponsor.lastUpdated)) / 1e18
+        ? (sponsor.storedBalance - (sponsor.paymentPerBlock * (now - sponsor.lastUpdated))) / 1e18
         : sponsor.storedBalance / 1e18,
-      gweiPerSec: sponsor.paymentPerBlock / 12 / 1e9,
+      gweiPerSec: sponsor.paymentPerBlock / 1e9,
       approved: sponsor.approved,
       active: sponsor.active,
     }))

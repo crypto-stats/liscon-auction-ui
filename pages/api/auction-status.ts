@@ -34,10 +34,37 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
   })
   const { data } = await req.json()
 
+  let activeSponsor: any = null
+  let topBidAmount = 0
+  let topBid: any = null
+
   const sponsors = await Promise.all(data.sponsors.map(async (sponsor: any) => {
     const details = await auction.sponsorDetails(sponsor.id)
+
+    if (details.active) {
+      activeSponsor = sponsor
+    }
+
+    if (parseInt(details.paymentPerBlock) > topBidAmount && details.storedBalance !== '0') {
+      topBidAmount = parseInt(details.paymentPerBlock)
+      topBid = sponsor
+    }
+
     return { id: sponsor.id, ...details }
   }))
+
+  if (signer) {
+    if (topBid && !activeSponsor) {
+      await auction.lift(topBid.id)
+      console.log(`Lifted ${topBid.id}`)
+      topBid.active = true
+    } else if (topBid && activeSponsor && topBid !== activeSponsor) {
+      await auction.swap(topBid.id, activeSponsor.id)
+      console.log(`Swapped ${activeSponsor.id} for ${topBid.id}`)
+      topBid.active = true
+      activeSponsor.active = false
+    }
+  }
 
   const ethCollected = await auction.ethCollected()
 

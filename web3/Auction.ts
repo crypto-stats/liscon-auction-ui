@@ -80,19 +80,29 @@ export default class Auction {
     await tx.wait()
   }
 
-  async deposit(campaignId: string, ethToDeposit: string) {
-    const tx = await this.wethAdapterContract.deposit(campaignId, {
+  async deposit(id: string, ethToDeposit: string) {
+    const tx = await this.wethAdapterContract.deposit(id, {
       value: ethers.utils.parseEther(ethToDeposit),
     })
     await tx.wait()
   }
 
-  async withdrawAll(campaignId: string) {
+  async withdrawAll(id: string) {
     const tx = await this.auctionContract.withdraw(
-      campaignId,
+      id,
       ethers.utils.parseEther('99999999'), // If withdrawing more than balance, it will withdraw all
       await this.auctionContract.signer.getAddress(),
     )
+    await tx.wait()
+  }
+
+  async lift(id: string) {
+    const tx = await this.auctionContract.lift(id)
+    await tx.wait()
+  }
+
+  async swap(inactiveId: string, activeId: string) {
+    const tx = await this.auctionContract.swap(inactiveId, activeId, { gasLimit: 1000000 })
     await tx.wait()
   }
 }
