@@ -3,12 +3,13 @@ import styled from 'styled-components'
 import { useAuction, Bid } from 'state/auction'
 import BidRow from './BidRow'
 
-const List = styled.ul`
+const List = styled.ol`
   margin: 0;
+  padding: 0;
 `
 
 const ListItem = styled.li`
-  list-type: none;
+  list-style: none;
   padding: 0;
 `
 
@@ -25,9 +26,9 @@ const SponsorList: React.FC<SponsorListProps> = ({ unapproved }) => {
 
   return (
     <List>
-      {_bids.map((bid: Bid) => (
+      {_bids.map((bid: Bid, i: number) => (
         <ListItem key={bid.id}>
-          <BidRow bid={bid} />
+          <BidRow bid={bid} num={i + 1} />
         </ListItem>
       ))}
     </List>

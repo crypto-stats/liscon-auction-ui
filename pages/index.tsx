@@ -5,18 +5,25 @@ import Header from 'components/Header'
 import ModeSelector from 'components/ModeSelector'
 import Simulator from 'components/Simulator'
 
-const Title = styled.h1`
-  color: #eeeeee;
-  font-size: 30px;
-  margin: 4px 0 8px;
-`
-
 const Narrow = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 600px;
   width: 100%;
   align-self: center;
+`
+
+const Full = styled.main`
+  margin: 10px;
+`
+
+const Explainer = styled.div`
+  max-width: 400px;
+  margin-right: 20px;
+`
+
+const ExplainerTitle = styled.h2`
+  font-size: 24px;
 `
 
 export default function Home() {
@@ -34,8 +41,31 @@ export default function Home() {
 
   return (
     <Providers mode={mode}>
-      <Title>LisCon Stream Sponsorship</Title>
-      <Simulator />
+      <Full>
+        <Header>LisCon Stream Sponsorship</Header>
+        <Simulator />
+
+        <Explainer>
+          <ExplainerTitle>How does this work?</ExplainerTitle>
+          <p>
+            For the Liscon stream we are trying out an experimental system that lets anyone add a placement to the stream by bidding with others in real-time.
+          </p>
+
+          <p>
+            The placement can be anything, it can be a logo and your project name or even your PFP.
+          </p>
+
+          <p>
+            The way it works is that you set a budget in ETH, and then set a spend per second bid in gwei. The one with the highest gwei per second spend will show up on the stream.
+          </p>
+
+          <p>
+            The top bidder will then spend their budget until either someone outbids them or their budget runs out. If you are the top bidder, you'll only spend your budget while the placement is in the top spot.
+          </p>
+
+          <p>You can at any time stop or withdraw your sponsorship spot. </p>
+        </Explainer>
+      </Full>
     </Providers>
   )
 }

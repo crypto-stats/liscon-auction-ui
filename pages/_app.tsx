@@ -13,6 +13,9 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: column;
     flex: 1 1 100%;
     margin: 0;
+  }
+
+  #__next {
     justify-content: center;
   }
 
@@ -27,7 +30,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       <Head>
         <title key="title">LisCon Stream and Sponsorship</title>
         <link rel="icon" href="/favicon.png" />
-        <link href="/NueveMachina/stylesheet.css" rel="stylesheet" />
+        <link href="/NeueMachina/stylesheet.css" rel="stylesheet" />
       </Head>
 
       <GlobalStyle />
