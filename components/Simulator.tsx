@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import Modal from 'react-modal'
 import Overlay from 'components/Overlay'
 import AuctionMetrics from 'components/AuctionMetrics'
 import SponsorForm from 'components/SponsorForm'
@@ -7,6 +8,7 @@ import SponsorList from 'components/SponsorList'
 import VideoPlayer from 'components/VideoPlayer'
 import WalletConnection from 'components/WalletConnection'
 import { useAuction } from 'state/auction'
+import Button from './Button'
 import Panel from './Panel'
 
 const Container = styled.div`
@@ -24,8 +26,14 @@ const Column = styled.div`
   flex-direction: column;
 `
 
+const Heading = styled.h2`
+  font-size: 36px;
+  display: flex;
+`
+
 const Simulator = () => {
   const { activeBid } = useAuction()
+  const [showNewBid, setShowNewBid] = useState(false)
 
   return (
     <Container>
@@ -38,9 +46,11 @@ const Simulator = () => {
           <AuctionMetrics />
         </Panel>
 
-        <Panel title="Submit Sponsorship Bid">
-          <SponsorForm />
-        </Panel>
+        <Heading>
+          Sponsor Bids
+          <Button onClick={() => setShowNewBid(true)}>New Bid</Button>
+        </Heading>
+
         <Panel title="Sponsor Bids">
           <SponsorList />
         </Panel>
@@ -54,6 +64,12 @@ const Simulator = () => {
           {activeBid && <Overlay>{activeBid.text}</Overlay>}
         </VideoPlayer>
       </Column>
+
+      {showNewBid && (
+        <Modal isOpen={true} onRequestClose={() => setShowNewBid(false)}>
+          <SponsorForm onClose={() => setShowNewBid(false)} />
+        </Modal>
+      )}
     </Container>
   )
 };
