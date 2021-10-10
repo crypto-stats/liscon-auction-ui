@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import CountUp from 'react-countup'
 import styled from 'styled-components'
+import Modal from 'react-modal'
 import { useAuction, Bid } from 'state/auction'
 import Button from './Button'
+import UpdateForm from './UpdateForm'
 
 const Row = styled.div`
   background: #EEEEE4;
@@ -29,10 +31,11 @@ const Right = styled.div`
   text-align: right;
 `
 
+Modal.setAppElement('#__next')
+
 const BidRow: React.FC<{ bid: Bid, num: number }> = ({ bid, num }) => {
-  const [showUpdate, setShowUpdate] = useState(false)
+  const [modal, setModal] = useState('')
   const [showDeposit, setShowDeposit] = useState(false)
-  const [newBid, setNewBid] = useState(bid.gweiPerSec)
   const [depositAmount, setDepositAmount] = useState('0')
   const { setBidApproval, update, updateBid, deposit, withdrawAll } = useAuction()
   
@@ -59,19 +62,18 @@ const BidRow: React.FC<{ bid: Bid, num: number }> = ({ bid, num }) => {
           ) : bid.balance}
         </div>
 
-        {showUpdate && (
-          <div>
-            New bid:
-            <input type="number" value={newBid} onChange={(e: any) => setNewBid(e.target.value)} />
-            <button onClick={async () => {
-              await updateBid(bid.id, newBid)
-              await update()
-              setShowUpdate(false)
-            }}>
-              Update
-            </button>
-            <button onClick={() => setShowUpdate(false)}>Cancel</button>
-          </div>
+        {modal === 'update' && (
+          <Modal isOpen={true} onRequestClose={() => setModal('')}>
+            <UpdateForm
+              bid={bid}
+              onClose={() => setModal('')}
+              onSave={async (newBid: number) => {
+                await updateBid(bid.id, newBid)
+                await update()
+                setModal('')
+              }}
+            />
+          </Modal>
         )}
 
         {showDeposit && (
@@ -97,7 +99,7 @@ const BidRow: React.FC<{ bid: Bid, num: number }> = ({ bid, num }) => {
           }}>
             {bid.approved ? 'Unapprove' : 'Approve'}
           </Button>
-          <Button onClick={() => setShowUpdate(true)} disabled={showUpdate}>Update Bid</Button>
+          <Button onClick={() => setModal('update')}>Update Bid</Button>
           <Button onClick={() => setShowDeposit(true)} disabled={showDeposit}>Deposit</Button>
           <Button onClick={() => withdrawAll(bid.id).then(update)} disabled={bid.balance === 0}>Withdraw All</Button>
         </div>
