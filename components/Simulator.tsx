@@ -11,23 +11,25 @@ import { useAuction } from 'state/auction'
 import Button from './Button'
 import Panel from './Panel'
 
-const Container = styled.div`
-  display: flex;
-  flex: 1;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-  }
-`
-
-const Column = styled.div`
-  flex: 1;
+const Column = styled.section`
+  flex-basis: 38%;
+  max-width: 38%;
   display: flex;
   flex-direction: column;
 `
+const VideoContainer = styled.section`
+  flex-basis: 32%;
+  max-width: 32%;
+`
+const HeadingContainer = styled.article`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 8px;
+`
 
 const Heading = styled.h2`
-  font-size: 36px;
+  font-size: 30px;
   display: flex;
 `
 
@@ -36,22 +38,28 @@ const Simulator = () => {
   const [showNewBid, setShowNewBid] = useState(false)
 
   return (
-    <Container>
+    <>
+      <VideoContainer>
+        <VideoPlayer>
+          {activeBid && <Overlay>{activeBid.text}</Overlay>}
+        </VideoPlayer>
+      </VideoContainer>
+
       <Column>
-        <Panel title="wallet">
-          <WalletConnection />
-        </Panel>
+        <Panel title="Wallet" ButtonEl={WalletConnection} />
 
         <Panel>
           <AuctionMetrics />
         </Panel>
 
-        <Heading>
-          Sponsor Bids
-          <Button onClick={() => setShowNewBid(true)}>New Bid</Button>
-        </Heading>
+        <HeadingContainer>
+          <Heading>
+            Sponsor Bids
+          </Heading>
+          <Button onClick={() => setShowNewBid(true)}>Place new bid</Button>
+        </HeadingContainer>
 
-        <Panel title="Sponsor Bids">
+        <Panel title="Current Bids">
           <SponsorList />
         </Panel>
         <Panel title="Unapproved Bids">
@@ -59,18 +67,12 @@ const Simulator = () => {
         </Panel>
       </Column>
 
-      <Column>
-        <VideoPlayer>
-          {activeBid && <Overlay>{activeBid.text}</Overlay>}
-        </VideoPlayer>
-      </Column>
-
       {showNewBid && (
         <Modal isOpen={true} onRequestClose={() => setShowNewBid(false)}>
           <SponsorForm onClose={() => setShowNewBid(false)} />
         </Modal>
       )}
-    </Container>
+    </>
   )
 };
 

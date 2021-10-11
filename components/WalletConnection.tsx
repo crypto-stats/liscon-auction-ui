@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from './Button'
 import { useAccounts } from 'state/accounts'
 
 const WalletConnection: React.FC = () => {
@@ -6,17 +7,13 @@ const WalletConnection: React.FC = () => {
 
   if (status === 'inactive') {
     return (
-      <div>
-        <button onClick={activate}>Connect wallet</button>
-      </div>
+      <Button onClick={activate}>Connect wallet</Button>
     )
   }
 
   if (status === 'wrong-chain') {
     return (
-      <div>
-        <button onClick={switchChain}>Switch to Arbitrum Testnet</button>
-      </div>
+      <Button onClick={switchChain}>Switch to Arbitrum Testnet</Button>
     )
   }
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from './Button'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -8,8 +9,7 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-const ModeButton = styled.button`
-  display: block;
+const ButtonTitle = styled.h3`
   margin: 10px;
 `
 
@@ -20,15 +20,15 @@ interface ModeSelectorProps {
 const ModeSelector: React.FC<ModeSelectorProps> = ({ onSelect }) => {
   return (
     <Container>
-      <ModeButton onClick={() => onSelect('memory')}>
-        <div>Simulator</div>
+      <Button onClick={() => onSelect('memory')}>
+        <ButtonTitle>Simulator</ButtonTitle>
         <div>Test the auction mechanism in your browser</div>
-      </ModeButton>
+      </Button>
 
-      <ModeButton onClick={() => onSelect('testnet')}>
-        <div>Testnet</div>
+      <Button onClick={() => onSelect('testnet')}>
+        <ButtonTitle>Testnet</ButtonTitle>
         <div>Run the auction on the Arbitrum testnet</div>
-      </ModeButton>
+      </Button>
     </Container>
   );
 };

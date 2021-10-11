@@ -7,7 +7,11 @@ const HeaderRow = styled.div`
   justify-content: space-between;
   align-content: center;
   align-items: center;
-  font-size: 36px;
+  padding: 2rem 0;
+  h1 {
+    font-size: 36px;
+    font-weight: 300;
+  }
 `
 
 const Logo = styled.div`
