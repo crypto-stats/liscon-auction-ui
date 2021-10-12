@@ -1,7 +1,11 @@
 import styled from 'styled-components'
 
-const Button = styled.button`
-  background: #EBBF41;
+interface Props {
+  cancel?: boolean
+}
+
+const Button = styled.button<Props>`
+  background: ${props => props.cancel ? "#F2E5BE" : "#EBBF41"};
   border-radius: 5px;
   font-family: 'Neue Machina';
   font-size: 1rem;

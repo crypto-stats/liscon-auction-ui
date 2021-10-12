@@ -3,12 +3,52 @@ import styled from 'styled-components'
 import { useAuction } from 'state/auction'
 import Button from './Button'
 
+const TitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
 const Title = styled.h4`
-  font-size: 36px;
+  font-size: 30px;
+  margin: 1rem 0;
+`
+
+const CloseIcon = styled.div`
+  background-image: url('/close.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 28px;
+  flex-basis: 28px;
+  margin-bottom: 8px;
+  &:hover {
+    cursor: pointer;
+  }
 `
 
 const Label = styled.label`
   display: block;
+  margin-top: 1.5rem;
+  line-height: 1.5;
+  padding: 10px 0;
+`
+
+const Input = styled.input`
+  font-family: 'Neue Machina';
+  font-size: 1rem;
+  background-color: #EEEEE4;
+  border: none;
+  padding: 15px;
+  width: calc(100% - 30px);
+  margin-bottom: 5px;
+`
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  button:first-child {
+    margin-right: 10px;
+  }
 `
 
 const ETH_PRICE = 3500
@@ -25,8 +65,11 @@ const SponsorList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   }
 
   return (
-    <div>
-      <Title>Place New bid</Title>
+    <section>
+      <TitleWrapper>
+        <Title>Place new bid</Title>
+        <CloseIcon role="button" tabIndex={0} onClick={onClose}/>
+      </TitleWrapper>
 
       <p>
         To get your placement onto the LisCon stream, you’ll need to outbid the current top bid, which is:
@@ -36,7 +79,7 @@ const SponsorList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       )}
 
       <Label htmlFor="text">Text</Label>
-      <input
+      <Input
         id="text"
         value={text}
         onChange={(e: any) => setText(e.target.value)}
@@ -44,7 +87,7 @@ const SponsorList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       />
 
       <Label htmlFor="bid">Bid (gwei-per-second)</Label>
-      <input
+      <Input
         type="number"
         value={gweiPerSec}
         onChange={(e: any) => setGweiPerSec(e.target.value)}
@@ -58,7 +101,7 @@ const SponsorList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       </div>
 
       <Label htmlFor="budget">Budget</Label>
-      <input
+      <Input
         id="budget"
         type="number"
         value={deposit}
@@ -71,13 +114,13 @@ const SponsorList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           currency: 'USD',
         })})
       </div>
-      <div>You may withdraw any unspent ETH at any time</div>
+      <p>You may withdraw any unspent ETH at any time</p>
 
-      <div>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={submit}>Place Bid</Button>
-      </div>
-    </div>
+      <ButtonWrapper>
+        <Button cancel onClick={onClose}>Cancel</Button>
+        <Button onClick={submit}>Place bid</Button>
+      </ButtonWrapper>
+    </section>
   );
 };
 

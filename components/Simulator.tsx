@@ -1,26 +1,25 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import Modal from 'react-modal'
-import Overlay from 'components/Overlay'
 import AuctionMetrics from 'components/AuctionMetrics'
 import SponsorForm from 'components/SponsorForm'
 import SponsorList from 'components/SponsorList'
-import VideoPlayer from 'components/VideoPlayer'
 import WalletConnection from 'components/WalletConnection'
-import { useAuction } from 'state/auction'
 import Button from './Button'
 import Panel from './Panel'
 
 const Column = styled.section`
-  flex-basis: 38%;
-  max-width: 38%;
+  flex-basis: 54%;
+  max-width: 54%;
   display: flex;
   flex-direction: column;
+  @media (max-width: 1000px) {
+    flex-basis: 100%;
+    max-width: 100%;
+    order: 1;
+  }
 `
-const VideoContainer = styled.section`
-  flex-basis: 32%;
-  max-width: 32%;
-`
+
 const HeadingContainer = styled.article`
   display: flex;
   justify-content: space-between;
@@ -34,17 +33,10 @@ const Heading = styled.h2`
 `
 
 const Simulator = () => {
-  const { activeBid } = useAuction()
   const [showNewBid, setShowNewBid] = useState(false)
 
   return (
     <>
-      <VideoContainer>
-        <VideoPlayer>
-          {activeBid && <Overlay>{activeBid.text}</Overlay>}
-        </VideoPlayer>
-      </VideoContainer>
-
       <Column>
         <Panel title="Wallet" ButtonEl={WalletConnection} />
 
@@ -68,7 +60,24 @@ const Simulator = () => {
       </Column>
 
       {showNewBid && (
-        <Modal isOpen={true} onRequestClose={() => setShowNewBid(false)}>
+        <Modal 
+          isOpen={true} 
+          onRequestClose={() => setShowNewBid(false)}
+          style={{
+            overlay: {
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            },
+            content: {
+              position: 'relative',
+              inset: 'unset',
+              background: '#FAFAF0',
+              padding: '30px',
+              maxWidth: '400px'
+            }
+          }}
+        >
           <SponsorForm onClose={() => setShowNewBid(false)} />
         </Modal>
       )}

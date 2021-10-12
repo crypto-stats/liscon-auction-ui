@@ -11,9 +11,14 @@ import { useAuction } from 'state/auction'
 
 const Centered = styled.main`
   width: 70%;
-  max-width: 1000px;
   display: flex;
   flex-direction: column;
+  @media (max-width: 1300px) {
+    width: 80%;
+  }
+  @media (max-width: 1000px) {
+    width: 90%;
+  }
 `
 
 const Flex = styled.section`
@@ -24,7 +29,24 @@ const Flex = styled.section`
   p {
     font-size: 24px;
     font-weight: 300;
+    margin-right: 1rem;
+    @media (max-width: 600px) {
+      text-align: center;
+    }
   }
+  button {
+    min-width: 200px;
+  }
+  @media (max-width: 600px) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+`
+
+const VideoContainer = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 export default function Home() {
@@ -44,9 +66,11 @@ export default function Home() {
     <Providers mode={mode}>
       <Centered>
         <Header><h1>LLisCon Live Stream</h1></Header>
-        <VideoPlayer>
-          {activeBid && <Overlay>{activeBid.text}</Overlay>}
-        </VideoPlayer>
+        <VideoContainer>
+          <VideoPlayer>
+            {activeBid && <Overlay>{activeBid.text}</Overlay>}
+          </VideoPlayer>
+        </VideoContainer>
         <Flex>
           <p>Place a bid and show your project or NFT in the stream.</p>
           <Link href='/sponsorship'>
