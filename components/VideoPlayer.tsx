@@ -5,6 +5,8 @@ import YouTube from 'react-youtube'
 const Container = styled.div`
   position: relative;
   aspect-ratio: 16 / 9;
+  width: 100%;
+  max-width: 1000px;
 
   & .player-container {
     height: 100%;
@@ -12,13 +14,6 @@ const Container = styled.div`
 `
 
 const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
-
   display: flex;
   flex-direction: column;
   justify-content: flex-end;

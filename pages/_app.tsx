@@ -17,6 +17,7 @@ const GlobalStyle = createGlobalStyle`
 
   #__next {
     justify-content: center;
+    align-items: center;
   }
 
   body {
