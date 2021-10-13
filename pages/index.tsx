@@ -65,7 +65,7 @@ export default function Home() {
   return (
     <Providers mode={mode}>
       <Centered>
-        <Header><h1>LLisCon Live Stream</h1></Header>
+        <Header><h1>LisCon Live Stream</h1></Header>
         <VideoContainer>
           <VideoPlayer>
             {activeBid && <Overlay>{activeBid.text}</Overlay>}
@@ -73,8 +73,11 @@ export default function Home() {
         </VideoContainer>
         <Flex>
           <p>Place a bid and show your project or NFT in the stream.</p>
-          <Link href='/sponsorship'>
-            <Button>Place new bid</Button>
+          <Link href='/sponsorship/memory'>
+            <Button>Place new bid (simulated)</Button>
+          </Link>
+          <Link href='/sponsorship/testnet'>
+            <Button>Place new bid (testnet)</Button>
           </Link>
         </Flex>
       </Centered>
