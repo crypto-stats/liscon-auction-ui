@@ -16,7 +16,7 @@ export interface AuctionState {
 }
 
 export interface AuctionStateWithMethods extends AuctionState {
-  addBid(owner: string, text: string, gweiPerSec: number, deposit: number): Promise<string>
+  addBid(owner: string, text: string, subtext: string, gweiPerSec: number, deposit: number, image: File | null): Promise<string>
   setBidApproval(id: string, approved: boolean): Promise<void>
   updateBid(id: string, gweiPerSec: number): Promise<void>
   deposit(id: string, eth: number): Promise<void>

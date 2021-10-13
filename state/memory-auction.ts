@@ -82,7 +82,7 @@ export const useMemoryAuction = () => {
   return {
     ...state,
 
-    async addBid(owner: string, text: string, gweiPerSec: number, deposit: number) {
+    async addBid(owner: string, text: string, subtext: string, gweiPerSec: number, deposit: number) {
       const id = (nextId.current++).toString()
       setState((currentState: AuctionState) => ({
         ...currentState,
@@ -90,6 +90,7 @@ export const useMemoryAuction = () => {
           id,
           owner,
           text,
+          subtext,
           balance: deposit,
           gweiPerSec,
           approved: false,

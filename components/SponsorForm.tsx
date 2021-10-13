@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import { useAuction } from 'state/auction'
 import Button from './Button'
@@ -51,16 +51,32 @@ const ButtonWrapper = styled.div`
   }
 `
 
+const Row = styled.div`
+  display: flex;
+`
+
+const Col = styled.div`
+  flex: 1;
+  margin-left: 4px;
+
+  &:first-child {
+    margin-left: 0;
+  }
+`
+
 const ETH_PRICE = 3500
 
 const SponsorList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const hiddenFileInput = useRef<HTMLInputElement | null>(null)
   const [text, setText] = useState('')
+  const [subtext, setSubText] = useState('')
   const [deposit, setDeposit] = useState('')
+  const [file, setFile] = useState<File | null>(null)
   const { addBid, activeBid } = useAuction()
   const [gweiPerSec, setGweiPerSec] = useState(activeBid?.gweiPerSec.toString() || '')
 
   const submit = async () => {
-    await addBid('', text, parseFloat(gweiPerSec), parseFloat(deposit))
+    await addBid('', text, subtext, parseFloat(gweiPerSec), parseFloat(deposit), file)
     onClose()
   }
 
@@ -78,43 +94,75 @@ const SponsorList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <p>{activeBid.text} - {activeBid.gweiPerSec} gwei/sec</p>
       )}
 
-      <Label htmlFor="text">Text</Label>
-      <Input
-        id="text"
-        value={text}
-        onChange={(e: any) => setText(e.target.value)}
-        placeholder="Text"
+      <Label>Image</Label>
+      <button onClick={() => hiddenFileInput.current!.click()}>
+        Upload a file
+      </button>
+      <input
+        type="file"
+        ref={hiddenFileInput}
+        onChange={(event: any) => setFile(event.target.files[0])}
+        style={{display: 'none'}}
       />
 
-      <Label htmlFor="bid">Bid (gwei-per-second)</Label>
-      <Input
-        type="number"
-        value={gweiPerSec}
-        onChange={(e: any) => setGweiPerSec(e.target.value)}
-        placeholder="Gwei per second"
-      />
-      <div>
-        ({((parseFloat(gweiPerSec) || 0) * ETH_PRICE / 1e9 * 60).toLocaleString('en-US', {
-          style: 'currency',
-          currency: 'USD',
-        })} per minute)
-      </div>
+      <Row>
+        <Col>
+          <Label htmlFor="text">Text</Label>
+          <Input
+            id="text"
+            value={text}
+            onChange={(e: any) => setText(e.target.value)}
+            placeholder="Text"
+          />
+        </Col>
 
-      <Label htmlFor="budget">Budget</Label>
-      <Input
-        id="budget"
-        type="number"
-        value={deposit}
-        onChange={(e: any) => setDeposit(e.target.value)}
-        placeholder="Deposit amount"
-      />
-      <div>
-        ({((parseFloat(deposit) || 0) * ETH_PRICE).toLocaleString('en-US', {
-          style: 'currency',
-          currency: 'USD',
-        })})
-      </div>
-      <p>You may withdraw any unspent ETH at any time</p>
+        <Col>
+          <Label htmlFor="text">Secondary Text</Label>
+          <Input
+            id="text"
+            value={subtext}
+            onChange={(e: any) => setSubText(e.target.value)}
+            placeholder="Text"
+          />
+        </Col>
+      </Row>
+
+
+      <Row>
+        <Col>
+          <Label htmlFor="bid">Bid (gwei-per-second)</Label>
+          <Input
+            type="number"
+            value={gweiPerSec}
+            onChange={(e: any) => setGweiPerSec(e.target.value)}
+            placeholder="Gwei per second"
+          />
+          <div>
+            ({((parseFloat(gweiPerSec) || 0) * ETH_PRICE / 1e9 * 60).toLocaleString('en-US', {
+              style: 'currency',
+              currency: 'USD',
+            })} per minute)
+          </div>
+        </Col>
+
+        <Col>
+          <Label htmlFor="budget">Budget</Label>
+          <Input
+            id="budget"
+            type="number"
+            value={deposit}
+            onChange={(e: any) => setDeposit(e.target.value)}
+            placeholder="Deposit amount"
+          />
+          <div>
+            ({((parseFloat(deposit) || 0) * ETH_PRICE).toLocaleString('en-US', {
+              style: 'currency',
+              currency: 'USD',
+            })})
+          </div>
+          <p>You may withdraw any unspent ETH at any time</p>
+        </Col>
+      </Row>
 
       <ButtonWrapper>
         <Button cancel onClick={onClose}>Cancel</Button>

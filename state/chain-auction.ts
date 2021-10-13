@@ -89,7 +89,34 @@ export const useChainAuction = () => {
   return {
     ...state,
 
-    async addBid(owner: string, text: string, gweiPerSec: number, deposit: number) {
+    async addBid(
+      owner: string,
+      text: string,
+      subtext: string,
+      gweiPerSec: number,
+      deposit: number,
+      image: File | null
+    ) {
+      let imageCid: string | null = null
+      if (image) {
+        const req = await fetch('/api/upload-image', {
+          method: 'POST',
+          body: image,
+          headers: {
+            type: image.type,
+            name: image.name,
+          },
+        })
+        const { cid } = await req.json()
+        imageCid = cid
+      }
+
+      await fetch('/api/upload-bid', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, subtext, image: imageCid })
+      })
+
       const auction = getAuction()
       const id = await auction.createSponsor({
         campaign: 'liscon',
