@@ -55,7 +55,7 @@ export const useChainAuction = () => {
     ...state,
 
     async addBid(
-      owner: string,
+      _owner: string, // TODO: remove
       text: string,
       subtext: string,
       gweiPerSec: number,

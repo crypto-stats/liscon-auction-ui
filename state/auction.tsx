@@ -10,6 +10,7 @@ const AuctionContext = React.createContext<AuctionStateWithMethods>({
   ethCollected: 0,
   activeBid: null,
   bids: [],
+  owner: null,
 
   async addBid() { throw new Error('Not initialized') },
   async setBidApproval() { throw new Error('Not initialized') },

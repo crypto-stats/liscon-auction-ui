@@ -26,7 +26,7 @@ export const useChainAccounts = () => {
   return {
     ...state,
     status,
-    activeAccount: account,
+    activeAccount: account || null,
 
     async activate() {
       const injected = new InjectedConnector({})
