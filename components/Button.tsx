@@ -12,8 +12,12 @@ const Button = styled.button<Props>`
   border: none;
   padding: 12px 20px;
   margin: 1rem 0;
+  text-decoration: none;
+  color: black;
+
   &:hover {
     cursor: pointer;
+    background: #e8b321;
   }
 `
 

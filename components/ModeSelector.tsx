@@ -1,6 +1,7 @@
 import React from 'react'
 import Button from './Button'
 import styled from 'styled-components'
+import Link from 'next/link'
 
 const Container = styled.div`
   max-width: 300px;
@@ -10,25 +11,25 @@ const Container = styled.div`
 `
 
 const ButtonTitle = styled.h3`
-  margin: 10px;
+  margin: 10px 0;
 `
 
-interface ModeSelectorProps {
-  onSelect: (mode: 'memory' | 'testnet') => void
-}
-
-const ModeSelector: React.FC<ModeSelectorProps> = ({ onSelect }) => {
+const ModeSelector: React.FC = () => {
   return (
     <Container>
-      <Button onClick={() => onSelect('memory')}>
-        <ButtonTitle>Simulator</ButtonTitle>
-        <div>Test the auction mechanism in your browser</div>
-      </Button>
+      <Link href='/sponsorship/memory' passHref>
+        <Button as="a">
+          <ButtonTitle>Simulator</ButtonTitle>
+          <div>Test the auction mechanism in your browser</div>
+        </Button>
+      </Link>
 
-      <Button onClick={() => onSelect('testnet')}>
-        <ButtonTitle>Testnet</ButtonTitle>
-        <div>Run the auction on the Arbitrum testnet</div>
-      </Button>
+      <Link href='/sponsorship/testnet' passHref>
+        <Button as="a">
+          <ButtonTitle>Testnet</ButtonTitle>
+          <div>Run the auction on the Kovan testnet</div>
+        </Button>
+      </Link>
     </Container>
   );
 };

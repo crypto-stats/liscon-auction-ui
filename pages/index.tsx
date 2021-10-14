@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Link from 'next/link'
 import Providers from 'state/Providers'
 import Header from 'components/Header'
 import ModeSelector from 'components/ModeSelector'
 import VideoWithOverlay from 'components/VideoWithOverlay'
-import Button from 'components/Button'
 
 const Centered = styled.main`
+  flex: 1;
   width: 70%;
   display: flex;
   flex-direction: column;
@@ -32,9 +31,7 @@ const Flex = styled.section`
       text-align: center;
     }
   }
-  button {
-    min-width: 200px;
-  }
+
   @media (max-width: 600px) {
     flex-wrap: wrap;
     justify-content: center;
@@ -45,22 +42,12 @@ const VideoContainer = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 1;
 `
 
 export default function Home() {
-  const [mode, setMode] = useState<'memory' | 'testnet' | null>(null)
-
-  if (!mode) {
-    return (
-      <Centered>
-        <Header><h1>LisCon Live Stream</h1></Header>
-        <ModeSelector onSelect={setMode} />
-      </Centered>
-    )
-  }
-
   return (
-    <Providers mode={mode}>
+    <Providers mode="testnet">
       <Centered>
         <Header><h1>LisCon Live Stream</h1></Header>
         <VideoContainer>
@@ -68,12 +55,7 @@ export default function Home() {
         </VideoContainer>
         <Flex>
           <p>Place a bid and show your project or NFT in the stream.</p>
-          <Link href='/sponsorship/memory'>
-            <Button>Place new bid (simulated)</Button>
-          </Link>
-          <Link href='/sponsorship/testnet'>
-            <Button>Place new bid (testnet)</Button>
-          </Link>
+          <ModeSelector />
         </Flex>
       </Centered>
     </Providers>
