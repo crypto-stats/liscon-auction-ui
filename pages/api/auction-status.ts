@@ -53,13 +53,22 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
       }
     }
 
-    const fullSponsor = { ...details, id: sponsor.id, metadata }
+    const fullSponsor = {
+      ...details,
+      id: sponsor.id,
+      metadata,
+      currentBalance: parseInt(details.storedBalance),
+    }
 
     if (details.active) {
+      fullSponsor.currentBalance -= details.paymentPerBlock * ((Date.now() / 1000) - details.lastUpdated)
+      fullSponsor.currentBalance = Math.max(fullSponsor.currentBalance, 0)
       activeSponsor = fullSponsor
     }
 
-    if (parseInt(details.paymentPerBlock) > topBidAmount && details.storedBalance !== '0') {
+    if (details.approved
+      && parseInt(details.paymentPerBlock) > topBidAmount
+      && fullSponsor.currentBalance / 1e18 > 0.0001) {
       topBidAmount = parseInt(details.paymentPerBlock)
       topBid = fullSponsor
     }

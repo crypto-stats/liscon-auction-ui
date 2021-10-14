@@ -12,7 +12,7 @@ const defaultState: AuctionState = {
 }
 
 export const useChainAuction = () => {
-  const { library } = useWeb3React()
+  const { library, account } = useWeb3React()
   const [state, setState] = useState<AuctionState>(defaultState)
 
   const updateBids = async () => {
@@ -34,11 +34,14 @@ export const useChainAuction = () => {
       active: sponsor.active,
     }))
 
+    const [activeBid] = bids.filter((bid: any) => bid.active)
+
     setState((currentState: AuctionState) => ({
       ...currentState,
       bids,
       owner: json.owner,
       ethCollected: parseFloat(json.ethCollected),
+      activeBid: activeBid || null,
     }))
   }
 
@@ -93,7 +96,7 @@ export const useChainAuction = () => {
           ...currentState,
           bids: [...currentState.bids, {
             id,
-            owner,
+            owner: account!,
             text,
             subtext,
             balance: deposit,
