@@ -8,57 +8,12 @@ const defaultState: AuctionState = {
   ethCollected: 0,
   activeBid: null,
   bids: [],
+  owner: null,
 }
 
 export const useChainAuction = () => {
   const { library } = useWeb3React()
   const [state, setState] = useState<AuctionState>(defaultState)
-
-  const updateState = (currentState: AuctionState) => {
-    let nextTopBid = currentState.activeBid
-    let ethCollected = currentState.ethCollected
-    const now = Date.now() / 1000
-
-    if (currentState.activeBid) {
-      let amountPaid = currentState.activeBid.gweiPerSec * (now - currentState.lastUpdate) / 1e9
-      if (amountPaid > currentState.activeBid.balance) {
-        amountPaid = currentState.activeBid.balance
-
-        currentState.activeBid.active = false
-        nextTopBid = null
-      }
-
-      currentState.activeBid.balance -= amountPaid
-      ethCollected += amountPaid
-    }
-
-    if (nextTopBid && !nextTopBid.approved) {
-      nextTopBid = null
-    }
-
-    for (const bid of currentState.bids) {
-      if (bid.approved
-        && bid.balance > 0
-        && (!nextTopBid || bid.gweiPerSec > nextTopBid.gweiPerSec)) {
-        nextTopBid = bid
-      }
-    }
-    if (nextTopBid !== currentState.activeBid) {
-      if (nextTopBid) {
-        nextTopBid.active = true
-      }
-      if (currentState.activeBid?.active) {
-        currentState.activeBid.active = false
-      }
-    }
-    return {
-      ...currentState,
-      ethCollected,
-      lastUpdate: now,
-      activeBid: nextTopBid,
-      bids: [...currentState.bids],
-    }
-  }
 
   const updateBids = async () => {
     const req = await fetch('/api/auction-status')
@@ -68,7 +23,9 @@ export const useChainAuction = () => {
     const bids = json.sponsors.map((sponsor: any) => ({
       id: sponsor.id,
       owner: sponsor.owner,
-      text: sponsor.metadata,
+      text: typeof sponsor.metadata === 'string' ? sponsor.metadata : sponsor.metadata.text,
+      subtext: typeof sponsor.metadata === 'string' ? null : sponsor.metadata.subtext,
+      image: typeof sponsor.metadata === 'string' ? null : sponsor.metadata.image,
       balance: sponsor.active
         ? (sponsor.storedBalance - (sponsor.paymentPerBlock * (now - sponsor.lastUpdated))) / 1e18
         : sponsor.storedBalance / 1e18,
@@ -77,7 +34,12 @@ export const useChainAuction = () => {
       active: sponsor.active,
     }))
 
-    setState((currentState: AuctionState) => ({ ...currentState, bids }))
+    setState((currentState: AuctionState) => ({
+      ...currentState,
+      bids,
+      owner: json.owner,
+      ethCollected: parseFloat(json.ethCollected),
+    }))
   }
 
   useEffect(() => {
@@ -111,17 +73,18 @@ export const useChainAuction = () => {
         imageCid = cid
       }
 
-      await fetch('/api/upload-bid', {
+      const metadataUpload = await fetch('/api/upload-bid', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, subtext, image: imageCid })
       })
+      const { cid } = await metadataUpload.json()
 
       const auction = getAuction()
       const id = await auction.createSponsor({
         campaign: 'liscon',
         gweiPerBlock: gweiPerSec.toString(),
-        metadata: text,
+        metadata: cid,
         depositAmount: deposit.toString(),
       })
 
@@ -132,10 +95,12 @@ export const useChainAuction = () => {
             id,
             owner,
             text,
+            subtext,
             balance: deposit,
             gweiPerSec,
             approved: false,
             active: false,
+            image: null, // TODO base64
           }],
         }
       })
@@ -167,7 +132,7 @@ export const useChainAuction = () => {
     },
 
     async update() {
-      setState(updateState)
+      await updateBids()
     },
   }
 }

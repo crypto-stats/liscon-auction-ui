@@ -8,12 +8,12 @@ const KOVAN_CHAIN_ID = 42
 
 const defaultState: AccountsState = {
   balances: {},
-  activeAccount: '',
+  activeAccount: null,
   status: 'inactive',
 }
 
 export const useChainAccounts = () => {
-  const { activate, active, chainId, library } = useWeb3React()
+  const { activate, active, chainId, library, account } = useWeb3React()
   const [state, setState] = useState<AccountsState>(defaultState)
 
   let status = 'ready'
@@ -26,6 +26,7 @@ export const useChainAccounts = () => {
   return {
     ...state,
     status,
+    activeAccount: account,
 
     async activate() {
       const injected = new InjectedConnector({})

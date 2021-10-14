@@ -6,6 +6,7 @@ const defaultState: AuctionState = {
   ethCollected: 0,
   activeBid: null,
   bids: [],
+  owner: null,
 }
 
 export const useMemoryAuction = () => {
@@ -95,6 +96,7 @@ export const useMemoryAuction = () => {
           gweiPerSec,
           approved: false,
           active: false,
+          image: null, // TODO
         }],
       }))
       return id

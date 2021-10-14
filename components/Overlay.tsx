@@ -35,18 +35,25 @@ const RightText = styled.div`
   justify-content: center;
 `
 
-const Overlay: React.FC = ({ children }) => {
+interface OverlayProps {
+  text: string
+  subtext: string | null
+  image: string | null
+}
+
+const Overlay: React.FC<OverlayProps> = ({ text, subtext, image }) => {
   return (
     <Container>
       <Logo />
       <Right>
         <RightText>
-          {children}
+          <div>{text}</div>
+          {subtext && <div>{subtext}</div>}
         </RightText>
 
-        <SponsorLogo style={{
-          backgroundImage: `url('https://usethebitcoin.com/wp-content/uploads/2018/03/CoinGecko.png'`
-        }} />
+        {image && (
+          <SponsorLogo style={{ backgroundImage: `url('${image}'` }} />
+        )}
       </Right>
     </Container>
   );

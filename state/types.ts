@@ -2,6 +2,8 @@ export interface Bid {
   id: string
   owner: string
   text: string
+  subtext: string | null
+  image: string | null
   gweiPerSec: number
   balance: number
   approved: boolean
@@ -13,6 +15,7 @@ export interface AuctionState {
   ethCollected: number
   activeBid: Bid | null
   bids: Bid[]
+  owner: string | null
 }
 
 export interface AuctionStateWithMethods extends AuctionState {
@@ -26,7 +29,7 @@ export interface AuctionStateWithMethods extends AuctionState {
 
 export interface AccountsState {
   balances: { [address: string]: number }
-  activeAccount: string
+  activeAccount: string | null
   status: string
 }
 

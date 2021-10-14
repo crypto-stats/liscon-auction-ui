@@ -84,6 +84,8 @@ export const AUCTION_ABI = [
   'function setApproved(bytes32 sponsorId, bool approved) external',
   'function setNumSlots(bytes16 campaign, uint8 newNumSlots) external',
   'function withdrawTreasury(address token, address recipient) external returns (uint256 amount)',
+
+  'function owner() external view returns (address)',
 ]
 
 export const WETH_ADAPTER_ABI = [

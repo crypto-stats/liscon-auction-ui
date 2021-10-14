@@ -69,6 +69,11 @@ export default class Auction {
     return ethers.utils.formatEther(paymentWei)
   }
 
+  async owner() {
+    const owner = await this.auctionContract.owner()
+    return owner
+  }
+
   async setBidApproval(id: string, approved: boolean) {
     const tx = await this.auctionContract.setApproved(id, approved)
     await tx.wait()
@@ -102,7 +107,7 @@ export default class Auction {
   }
 
   async swap(inactiveId: string, activeId: string) {
-    const tx = await this.auctionContract.swap(inactiveId, activeId, { gasLimit: 1000000 })
+    const tx = await this.auctionContract.swap(inactiveId, activeId)
     await tx.wait()
   }
 }

@@ -8,7 +8,13 @@ const VideoWithOverlay = () => {
 
   return (
     <VideoPlayer>
-      {activeBid && <Overlay>{activeBid.text}</Overlay>}
+      {activeBid && (
+        <Overlay
+          text={activeBid.text}
+          subtext={activeBid.subtext}
+          image={activeBid.image}
+        />
+      )}
     </VideoPlayer>
   )
 }

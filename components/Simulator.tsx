@@ -5,6 +5,8 @@ import AuctionMetrics from 'components/AuctionMetrics'
 import SponsorForm from 'components/SponsorForm'
 import SponsorList from 'components/SponsorList'
 import WalletConnection from 'components/WalletConnection'
+import { useAccounts } from 'state/accounts'
+import { useAuction, Bid } from 'state/auction'
 import Button from './Button'
 import Panel from './Panel'
 
@@ -34,6 +36,18 @@ const Heading = styled.h2`
 
 const Simulator = () => {
   const [showNewBid, setShowNewBid] = useState(false)
+  const { bids, owner } = useAuction()
+  const { activeAccount } = useAccounts()
+
+  const isOwner = owner === activeAccount
+
+  const activeBids = bids
+    .filter((bid: Bid) => bid.approved)
+    .sort((a: Bid, b: Bid) => !b.balance !== !a.balance ? b.balance - a.balance : b.gweiPerSec - a.gweiPerSec)
+
+  const inactiveBids = bids
+    .filter((bid: Bid) => !bid.approved && (isOwner || bid.owner === activeAccount))
+    .sort((a: Bid, b: Bid) => !b.balance !== !a.balance ? b.balance - a.balance : b.gweiPerSec - a.gweiPerSec)
 
   return (
     <>
@@ -48,15 +62,17 @@ const Simulator = () => {
           <Heading>
             Sponsor Bids
           </Heading>
-          <Button onClick={() => setShowNewBid(true)}>Place new bid</Button>
+          <Button onClick={() => setShowNewBid(true)} disabled={!activeAccount}>Place new bid</Button>
         </HeadingContainer>
 
         <Panel title="Current Bids">
-          <SponsorList />
+          <SponsorList bids={activeBids} />
         </Panel>
-        <Panel title="Unapproved Bids">
-          <SponsorList unapproved />
-        </Panel>
+        {inactiveBids.length > 0 && (
+          <Panel title="Unapproved Bids">
+            <SponsorList bids={inactiveBids} />
+          </Panel>
+        )}
       </Column>
 
       {showNewBid && (

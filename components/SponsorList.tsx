@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useAuction, Bid } from 'state/auction'
+import { Bid } from 'state/auction'
 import BidRow from './BidRow'
 
 const List = styled.ol`
@@ -14,19 +14,13 @@ const ListItem = styled.li`
 `
 
 interface SponsorListProps {
-  unapproved?: boolean
+  bids: Bid[]
 }
 
-const SponsorList: React.FC<SponsorListProps> = ({ unapproved }) => {
-  const { bids } = useAuction()
-
-  const _bids = bids
-    .filter((bid: Bid) => bid.approved !== !!unapproved)
-    .sort((a: Bid, b: Bid) => !b.balance !== !a.balance ? b.balance - a.balance : b.gweiPerSec - a.gweiPerSec)
-
+const SponsorList: React.FC<SponsorListProps> = ({ bids }) => {
   return (
     <List>
-      {_bids.map((bid: Bid, i: number) => (
+      {bids.map((bid: Bid, i: number) => (
         <ListItem key={bid.id}>
           <BidRow bid={bid} num={i + 1} />
         </ListItem>

@@ -41,43 +41,64 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
   const sponsors = await Promise.all(data.sponsors.map(async (sponsor: any) => {
     const details = await auction.sponsorDetails(sponsor.id)
 
+    let metadata = details.metadata
+    if (metadata.indexOf('Qm') === 0) {
+      const metadataRequest = await fetch(`https://gateway.pinata.cloud/ipfs/${details.metadata}`)
+      metadata = await metadataRequest.json()
+
+      if (metadata.image) {
+        const imageRequest = await fetch(`https://gateway.pinata.cloud/ipfs/${metadata.image}`)
+        const blob: any = await imageRequest.arrayBuffer()
+        metadata.image = 'data:image/jpeg;base64,' + Buffer.from(blob, 'binary').toString('base64')
+      }
+    }
+
+    const fullSponsor = { ...details, id: sponsor.id, metadata }
+
     if (details.active) {
-      activeSponsor = sponsor
+      activeSponsor = fullSponsor
     }
 
     if (parseInt(details.paymentPerBlock) > topBidAmount && details.storedBalance !== '0') {
       topBidAmount = parseInt(details.paymentPerBlock)
-      topBid = sponsor
+      topBid = fullSponsor
     }
 
-    return { id: sponsor.id, ...details }
+    return fullSponsor
   }))
 
   if (signer) {
     if (topBid && !activeSponsor) {
-      await auction.lift(topBid.id)
-      console.log(`Lifted ${topBid.id}`)
-      topBid.active = true
+      try {
+        await auction.lift(topBid.id)
+        console.log(`Lifted ${topBid.id}`)
+        topBid.active = true
+      } catch (e) {
+        console.warn(`Failed to lift ${topBid.id}`, e)
+      }
     } else if (topBid && activeSponsor && topBid !== activeSponsor) {
-      await auction.swap(topBid.id, activeSponsor.id)
-      console.log(`Swapped ${activeSponsor.id} for ${topBid.id}`)
-      topBid.active = true
-      activeSponsor.active = false
+      try {
+        await auction.swap(topBid.id, activeSponsor.id)
+        console.log(`Swapped ${activeSponsor.id} for ${topBid.id}`)
+        topBid.active = true
+        activeSponsor.active = false
+      } catch (e) {
+        console.warn(`Failed to swap ${activeSponsor.id} for ${topBid.id}`, e)
+      }
     }
   }
 
-  const ethCollected = await auction.ethCollected()
+  const [ethCollected, owner] = await Promise.all([
+    auction.ethCollected(),
+    auction.owner(),
+  ])
 
   res.setHeader('Cache-Control', 'max-age=0, s-maxage=5, stale-while-revalidate');
   res.json({
     success: true,
     sponsors,
     ethCollected,
-    // total,
-    // totalUSD,
-    // yesterday,
-    // yesterdayUSD,
-    // block,
+    owner,
   })
 }
 

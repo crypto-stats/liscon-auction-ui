@@ -4,10 +4,8 @@ import Link from 'next/link'
 import Providers from 'state/Providers'
 import Header from 'components/Header'
 import ModeSelector from 'components/ModeSelector'
-import VideoPlayer from 'components/VideoPlayer'
-import Overlay from 'components/Overlay'
+import VideoWithOverlay from 'components/VideoWithOverlay'
 import Button from 'components/Button'
-import { useAuction } from 'state/auction'
 
 const Centered = styled.main`
   width: 70%;
@@ -51,7 +49,6 @@ const VideoContainer = styled.section`
 
 export default function Home() {
   const [mode, setMode] = useState<'memory' | 'testnet' | null>(null)
-  const { activeBid } = useAuction()
 
   if (!mode) {
     return (
@@ -67,9 +64,7 @@ export default function Home() {
       <Centered>
         <Header><h1>LisCon Live Stream</h1></Header>
         <VideoContainer>
-          <VideoPlayer>
-            {activeBid && <Overlay>{activeBid.text}</Overlay>}
-          </VideoPlayer>
+          <VideoWithOverlay />
         </VideoContainer>
         <Flex>
           <p>Place a bid and show your project or NFT in the stream.</p>
