@@ -43,11 +43,11 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
 
     let metadata = details.metadata
     if (metadata.indexOf('Qm') === 0) {
-      const metadataRequest = await fetch(`https://gateway.pinata.cloud/ipfs/${details.metadata}`)
+      const metadataRequest = await fetch(`https://ipfs.io/ipfs/${details.metadata}`)
       metadata = await metadataRequest.json()
 
       if (metadata.image) {
-        const imageRequest = await fetch(`https://gateway.pinata.cloud/ipfs/${metadata.image}`)
+        const imageRequest = await fetch(`https://ipfs.io/ipfs/${metadata.image}`)
         const blob: any = await imageRequest.arrayBuffer()
         metadata.image = 'data:image/jpeg;base64,' + Buffer.from(blob, 'binary').toString('base64')
       }
