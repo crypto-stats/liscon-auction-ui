@@ -20,6 +20,10 @@ const GlobalStyle = createGlobalStyle`
     align-items: center;
   }
 
+  .ReactModal__Overlay {
+    z-index: 10;
+  }
+
   body {
     background: #FAFAF0;
     color: #000000;

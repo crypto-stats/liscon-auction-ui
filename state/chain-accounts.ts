@@ -1,14 +1,16 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AccountsState } from './types'
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
+import { ethers } from 'ethers'
 
-// const ARB_TESTNET_CHAIN_ID = 421611
-const KOVAN_CHAIN_ID = 42
+const ARB_TESTNET_CHAIN_ID = 421611
+// const KOVAN_CHAIN_ID = 42
 
 const defaultState: AccountsState = {
   balances: {},
   activeAccount: null,
+  accountBalance: '0',
   status: 'inactive',
 }
 
@@ -19,9 +21,29 @@ export const useChainAccounts = () => {
   let status = 'ready'
   if (!active) {
     status = 'inactive'
-  } else if (chainId !== KOVAN_CHAIN_ID) {
+  } else if (chainId !== ARB_TESTNET_CHAIN_ID) {
     status = 'wrong-chain'
   }
+
+  useEffect(() => {
+    let timeout: any = null
+    const refreshBalance = async () => {
+      try {
+        const balance = await library.getBalance(account)
+        setState((currentState: AccountsState) => ({
+          ...currentState,
+          accountBalance: ethers.utils.formatEther(balance),
+        }))
+      } catch (e) {}
+      timeout = setTimeout(refreshBalance, 5000)
+    }
+
+    if (status === 'ready') {
+      refreshBalance()
+    }
+
+    return () => timeout && clearTimeout(timeout)
+  }, [status, account])
 
   return {
     ...state,
@@ -36,17 +58,17 @@ export const useChainAccounts = () => {
 
     async switchChain() {
       try {
-        await library.send('wallet_switchEthereumChain', [{ chainId: `0x${KOVAN_CHAIN_ID.toString(16)}` }])
+        await library.send('wallet_switchEthereumChain', [{ chainId: `0x${ARB_TESTNET_CHAIN_ID.toString(16)}` }])
       } catch (error: any) {
         // This error code indicates that the chain has not been added to MetaMask
         // if it is not, then install it into the user MetaMask
         if (error.code === 4902) {
           try {
             await library.send('wallet_addEthereumChain', [{
-              chainId: `0x${KOVAN_CHAIN_ID.toString(16)}`,
+              chainId: `0x${ARB_TESTNET_CHAIN_ID.toString(16)}`,
               chainName: 'Arbitrum Testnet',
               rpcUrl: 'https://rinkeby.arbitrum.io/rpc',
-              blockExplorerUrl: 'https://rinkeby-explorer.arbitrum.io/#/',
+              blockExplorerUrl: 'https://testnet.arbiscan.io/',
             }])
           } catch (addError) {
             console.error(addError);
@@ -56,25 +78,19 @@ export const useChainAccounts = () => {
       }
     },
 
-    async transfer(from: string, to: string, amount: number) {
-      setState((currentState: AccountsState) => {
-        if (currentState.balances[from] < amount) {
-          throw new Error(`Can't transfer from ${from}: insufficent balance`)
-        }
-
-        return {
-          ...currentState,
-          balances: {
-            ...currentState.balances,
-            [from]: currentState.balances[from] - amount,
-            [to]: currentState.balances[from] + amount,
-          },
-        }
-      })
-    },
+    async transfer() {},
 
     async balanceOf(account: string) {
       return state.balances[account] || 0
+    },
+
+    async faucet() {
+      const req = await fetch('/api/faucet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address: account }),
+      })
+      await req.json()
     },
   }
 }

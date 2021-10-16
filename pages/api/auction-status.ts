@@ -1,16 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import Auction, { KOVAN } from 'web3/Auction'
+import Auction, { NETWORK } from 'web3/Auction'
 import { ethers } from 'ethers'
 
-// const rpc = 'https://rinkeby.arbitrum.io/rpc'
-const rpc = `https://kovan.infura.io/v3/${process.env.INFURA_KEY}`
+const rpc = 'https://rinkeby.arbitrum.io/rpc'
+// const rpc = `https://kovan.infura.io/v3/${process.env.INFURA_KEY}`
 
 const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
   const provider = new ethers.providers.JsonRpcProvider(rpc)
   const signer = process.env.MNEMONIC
     ? ethers.Wallet.fromMnemonic(process.env.MNEMONIC).connect(provider)
     : null
-  const auction = new Auction(signer || provider, KOVAN.AUCTION_ADDRESS, KOVAN.WETH_ADAPTER_ADDRESS)
+  const auction = new Auction(signer || provider, NETWORK.AUCTION_ADDRESS, NETWORK.WETH_ADAPTER_ADDRESS)
 
   const req = await fetch('https://api.thegraph.com/subgraphs/name/dmihal/sponsor-auction', {
     headers: {

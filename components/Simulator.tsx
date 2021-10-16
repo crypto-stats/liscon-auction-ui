@@ -4,6 +4,7 @@ import Modal from 'react-modal'
 import AuctionMetrics from 'components/AuctionMetrics'
 import SponsorForm from 'components/SponsorForm'
 import SponsorList from 'components/SponsorList'
+import WalletBalance from 'components/WalletBalance'
 import WalletConnection from 'components/WalletConnection'
 import { useAccounts } from 'state/accounts'
 import { useAuction, Bid } from 'state/auction'
@@ -52,7 +53,9 @@ const Simulator = () => {
   return (
     <>
       <Column>
-        <Panel title="Wallet" ButtonEl={WalletConnection} />
+        <Panel title="Wallet" ButtonEl={WalletConnection}>
+          <WalletBalance />
+        </Panel>
 
         <Panel>
           <AuctionMetrics />

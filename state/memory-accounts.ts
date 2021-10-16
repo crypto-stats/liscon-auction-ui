@@ -7,6 +7,7 @@ export const ADMIN_ACCOUNT = '0x2222222222222222222222222222222222222222'
 const defaultState: AccountsState = {
   balances: {},
   activeAccount: USER_ACCOUNT,
+  accountBalance: '0',
   status: 'ready',
 }
 
@@ -39,5 +40,7 @@ export const useMemoryAccounts = () => {
     async balanceOf(account: string) {
       return state.balances[account] || 0
     },
+
+    async faucet() {},
   }
 }
