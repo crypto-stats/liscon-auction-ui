@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Providers from 'state/Providers'
 import Header from 'components/Header'
+import Button from 'components/Button'
 import ModeSelector from 'components/ModeSelector'
 import VideoWithOverlay from 'components/VideoWithOverlay'
 
@@ -46,6 +47,8 @@ const VideoContainer = styled.section`
 `
 
 export default function Home() {
+  const [showSelector, setShowSelector] = useState(false)
+
   return (
     <Providers mode="testnet">
       <Centered>
@@ -55,8 +58,11 @@ export default function Home() {
         </VideoContainer>
         <Flex>
           <p>Place a bid and show your project or NFT in the stream.</p>
-          <ModeSelector />
+          <Button onClick={() => setShowSelector(!showSelector)}>Add Sponsorship Bid</Button>
         </Flex>
+        {showSelector && (
+          <ModeSelector />
+        )}
       </Centered>
     </Providers>
   )
