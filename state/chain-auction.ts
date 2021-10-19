@@ -40,7 +40,7 @@ export const useChainAuction = () => {
       ...currentState,
       bids,
       owner: json.owner,
-      ethCollected: parseFloat(json.ethCollected),
+      ethCollected: json.ethCollected / 1e18,
       activeBid: activeBid || null,
     }))
   }

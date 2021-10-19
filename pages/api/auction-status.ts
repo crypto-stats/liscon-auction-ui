@@ -25,6 +25,8 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
           metadata
           approved
           active
+          storedBalance,
+          lastUpdated
         }
         auctionGlobal(id: "${NETWORK.AUCTION_ADDRESS.toLowerCase()}") {
           owner
@@ -46,11 +48,9 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
   let topBid: any = null
 
   const sponsors = await Promise.all(data.sponsors.map(async (sponsor: any) => {
-    const details = await auction.sponsorDetails(sponsor.id)
-
-    let metadata = details.metadata
+    let metadata = sponsor.metadata
     if (metadata.indexOf('Qm') === 0) {
-      const metadataRequest = await fetch(`https://ipfs.io/ipfs/${details.metadata}`)
+      const metadataRequest = await fetch(`https://ipfs.io/ipfs/${sponsor.metadata}`)
       metadata = await metadataRequest.json()
 
       if (metadata.image) {
@@ -61,22 +61,22 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const fullSponsor = {
-      ...details,
+      ...sponsor,
       id: sponsor.id,
       metadata,
-      currentBalance: parseInt(details.storedBalance),
+      currentBalance: parseInt(sponsor.storedBalance),
     }
 
-    if (details.active) {
-      fullSponsor.currentBalance -= details.paymentPerBlock * ((Date.now() / 1000) - details.lastUpdated)
+    if (sponsor.active) {
+      fullSponsor.currentBalance -= sponsor.paymentPerBlock * ((Date.now() / 1000) - sponsor.lastUpdated)
       fullSponsor.currentBalance = Math.max(fullSponsor.currentBalance, 0)
       activeSponsor = fullSponsor
     }
 
-    if (details.approved
-      && parseInt(details.paymentPerBlock) > topBidAmount
+    if (sponsor.approved
+      && parseInt(sponsor.paymentPerBlock) > topBidAmount
       && fullSponsor.currentBalance / 1e18 > 0.0001) {
-      topBidAmount = parseInt(details.paymentPerBlock)
+      topBidAmount = parseInt(sponsor.paymentPerBlock)
       topBid = fullSponsor
     }
 
