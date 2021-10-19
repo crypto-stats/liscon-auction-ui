@@ -46,7 +46,16 @@ export const useChainAuction = () => {
   }
 
   useEffect(() => {
-    updateBids()
+    let loop: any = null;
+    const updateLoop = async () => {
+      try {
+        await updateBids()
+      } catch (e) {}
+      loop = setTimeout(updateLoop, 10 * 1000)
+    }
+    updateLoop()
+
+    return () => loop && clearTimeout(loop)
   }, [])
 
   const getAuction = () => new Auction(library.getSigner(), NETWORK.AUCTION_ADDRESS, NETWORK.WETH_ADAPTER_ADDRESS)
