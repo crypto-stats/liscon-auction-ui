@@ -1,6 +1,12 @@
 import { AUCTION_ABI, WETH_ADAPTER_ABI } from './abis'
 import { ethers, Contract } from 'ethers'
 
+export const ARBITRUM = {
+  AUCTION_ADDRESS: '0x205c7ba994Fb43b11d35f13495C19204e1712de9',
+  WETH_ADAPTER_ADDRESS: '0x582d2093452A0Cf9AB354Ae272aF4bAC507cb0ef',
+  WETH_ADDRESS: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+}
+
 export const ARB_TESTNET = {
   AUCTION_ADDRESS: '0x96fa4184caBf68C15de2d7F9C7ae2445bEbe7fFA',
   WETH_ADAPTER_ADDRESS: '0xc54B31D8C54926897283c04975dBce00Ca95b5Fb',
@@ -13,7 +19,7 @@ export const KOVAN = {
   WETH_ADDRESS: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 }
 
-export const NETWORK = ARB_TESTNET
+export const NETWORK = ARBITRUM
 
 export default class Auction {
   private auctionContract: Contract;

@@ -2,7 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import Auction, { NETWORK } from 'web3/Auction'
 import { ethers } from 'ethers'
 
-const rpc = 'https://rinkeby.arbitrum.io/rpc'
+// const rpc = 'https://rinkeby.arbitrum.io/rpc'
+const rpc = 'https://arb1.arbitrum.io/rpc'
 // const rpc = `https://kovan.infura.io/v3/${process.env.INFURA_KEY}`
 
 const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
@@ -108,8 +109,8 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
   res.json({
     success: true,
     sponsors,
-    ethCollected: data.token.totalCollected,
-    ethBalance: data.token.collectedBalance,
+    ethCollected: data.token?.totalCollected || '0',
+    ethBalance: data.token?.collectedBalance || '0',
     owner: data.auctionGlobal.owner,
   })
 }
