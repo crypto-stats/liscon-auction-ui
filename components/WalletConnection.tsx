@@ -13,7 +13,7 @@ const WalletConnection: React.FC = () => {
 
   if (status === 'wrong-chain') {
     return (
-      <Button onClick={switchChain}>Switch to Arbitrum Testnet</Button>
+      <Button onClick={switchChain}>Switch to Arbitrum</Button>
     )
   }
 
