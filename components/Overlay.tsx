@@ -24,6 +24,8 @@ const SponsorLogo = styled.div`
   aspect-ratio: 1;
   background-size: contain;
   background-repeat: no-repeat;
+  background-color: #e9e9e9;
+  border-radius: 4px;
 `
 
 const RightText = styled.div`
