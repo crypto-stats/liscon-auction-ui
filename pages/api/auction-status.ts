@@ -26,6 +26,13 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
           approved
           active
         }
+        auctionGlobal(id: "${NETWORK.AUCTION_ADDRESS}") {
+          owner
+        }
+        token(id: "${NETWORK.WETH_ADDRESS}") {
+          totalCollected
+          collectedBalance
+        }
       }
       `,
       variables: {},
@@ -97,17 +104,13 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 
-  const [ethCollected, owner] = await Promise.all([
-    auction.ethCollected(),
-    auction.owner(),
-  ])
-
   res.setHeader('Cache-Control', 'max-age=0, s-maxage=5, stale-while-revalidate');
   res.json({
     success: true,
     sponsors,
-    ethCollected,
-    owner,
+    ethCollected: data.token.totalCollected,
+    ethBalance: data.token.collectedBalance,
+    owner: data.auctionGlobal.owner,
   })
 }
 

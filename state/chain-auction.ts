@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import Auction, { KOVAN } from 'web3/Auction'
+import Auction, { NETWORK } from 'web3/Auction'
 import { AuctionState, /*Bid*/ } from './types'
 
 const defaultState: AuctionState = {
@@ -49,7 +49,7 @@ export const useChainAuction = () => {
     updateBids()
   }, [])
 
-  const getAuction = () => new Auction(library.getSigner(), KOVAN.AUCTION_ADDRESS, KOVAN.WETH_ADAPTER_ADDRESS)
+  const getAuction = () => new Auction(library.getSigner(), NETWORK.AUCTION_ADDRESS, NETWORK.WETH_ADAPTER_ADDRESS)
 
   return {
     ...state,

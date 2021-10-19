@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useAuction } from 'state/auction'
 import Button from './Button'
@@ -95,7 +95,7 @@ const SponsorList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       )}
 
       <Label>Image</Label>
-      <ImageSelector onChange={(file: File) => setFile(file)} value={file} />
+      <ImageSelector onChange={(file: File | null) => setFile(file)} value={file} />
 
       <Row>
         <Col>
