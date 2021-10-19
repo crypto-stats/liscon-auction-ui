@@ -26,10 +26,10 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
           approved
           active
         }
-        auctionGlobal(id: "${NETWORK.AUCTION_ADDRESS}") {
+        auctionGlobal(id: "${NETWORK.AUCTION_ADDRESS.toLowerCase()}") {
           owner
         }
-        token(id: "${NETWORK.WETH_ADDRESS}") {
+        token(id: "${NETWORK.WETH_ADDRESS.toLowerCase()}") {
           totalCollected
           collectedBalance
         }

@@ -40,7 +40,7 @@ const Simulator = () => {
   const { bids, owner } = useAuction()
   const { activeAccount } = useAccounts()
 
-  const isOwner = owner === activeAccount
+  const isOwner = owner === activeAccount?.toLowerCase()
 
   const activeBids = bids
     .filter((bid: Bid) => bid.approved)

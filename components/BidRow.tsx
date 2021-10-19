@@ -104,7 +104,7 @@ const BidRow: React.FC<{ bid: Bid, num: number }> = ({ bid, num }) => {
         )}
 
         <div>
-          {activeAccount === owner && (
+          {activeAccount?.toLowerCase() === owner && (
             <Button onClick={async () => {
               await setBidApproval(bid.id, !bid.approved)
               await update()
