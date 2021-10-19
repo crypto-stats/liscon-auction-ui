@@ -47,7 +47,7 @@ const Simulator = () => {
     .sort((a: Bid, b: Bid) => !b.balance !== !a.balance ? b.balance - a.balance : b.gweiPerSec - a.gweiPerSec)
 
   const inactiveBids = bids
-    .filter((bid: Bid) => !bid.approved && (isOwner || bid.owner === activeAccount))
+    .filter((bid: Bid) => !bid.approved && (isOwner || bid.owner === activeAccount?.toLowerCase()))
     .sort((a: Bid, b: Bid) => !b.balance !== !a.balance ? b.balance - a.balance : b.gweiPerSec - a.gweiPerSec)
 
   return (

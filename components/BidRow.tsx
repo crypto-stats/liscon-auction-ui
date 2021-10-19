@@ -112,8 +112,11 @@ const BidRow: React.FC<{ bid: Bid, num: number }> = ({ bid, num }) => {
               {bid.approved ? 'Unapprove' : 'Approve'}
             </Button>
           )}
+          {!bid.approved && activeAccount?.toLowerCase() !== owner && (
+            <div>Pending Approval</div>
+          )}
 
-          {activeAccount === bid.owner && (
+          {activeAccount?.toLowerCase() === bid.owner && (
             <Fragment>
               <Button onClick={() => setModal('update')}>Update Bid</Button>
               <Button onClick={() => setShowDeposit(true)} disabled={showDeposit}>Deposit</Button>
