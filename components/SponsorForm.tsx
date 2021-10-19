@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import { useAuction } from 'state/auction'
 import Button from './Button'
+import ImageSelector from './ImageSelector'
 
 const TitleWrapper = styled.div`
   display: flex;
@@ -67,7 +68,6 @@ const Col = styled.div`
 const ETH_PRICE = 3500
 
 const SponsorList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const hiddenFileInput = useRef<HTMLInputElement | null>(null)
   const [text, setText] = useState('')
   const [subtext, setSubText] = useState('')
   const [deposit, setDeposit] = useState('')
@@ -95,15 +95,7 @@ const SponsorList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       )}
 
       <Label>Image</Label>
-      <button onClick={() => hiddenFileInput.current!.click()}>
-        Upload a file
-      </button>
-      <input
-        type="file"
-        ref={hiddenFileInput}
-        onChange={(event: any) => setFile(event.target.files[0])}
-        style={{display: 'none'}}
-      />
+      <ImageSelector onChange={(file: File) => setFile(file)} value={file} />
 
       <Row>
         <Col>
