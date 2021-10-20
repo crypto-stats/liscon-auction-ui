@@ -63,12 +63,14 @@ const SponsorshipPage: NextPage = () => {
   const router = useRouter()
   const { mode } = router.query
 
-  if (mode !== 'testnet' && mode !== 'memory') {
+  if (mode !== 'arbitrum' && mode !== 'memory') {
     return null
   }
 
+  const _mode = mode === 'arbitrum' ? 'testnet' : 'memory'
+
   return (
-    <Providers mode={mode}>
+    <Providers mode={_mode}>
       <Full>
         <Header><h1>LisCon Stream Sponsorship</h1></Header>
         <LinkWrapper>
@@ -118,7 +120,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [
       { params: { mode: 'memory' } },
-      { params: { mode: 'testnet' } },
+      { params: { mode: 'arbitrum' } },
     ],
     fallback: false,
   }

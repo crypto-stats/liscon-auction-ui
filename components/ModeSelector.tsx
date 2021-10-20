@@ -17,10 +17,10 @@ const ButtonTitle = styled.h3`
 const ModeSelector: React.FC = () => {
   return (
     <Container>
-      <Link href='/sponsorship/testnet' passHref>
+      <Link href='/sponsorship/arbitrum' passHref>
         <Button as="a">
-          <ButtonTitle>Testnet</ButtonTitle>
-          <div>Run the auction on the Kovan testnet</div>
+          <ButtonTitle>Arbitrum</ButtonTitle>
+          <div>Add sponsorship to the live stream using Arbitrum</div>
         </Button>
       </Link>
 
