@@ -71,13 +71,20 @@ const SponsorList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [text, setText] = useState('')
   const [subtext, setSubText] = useState('')
   const [deposit, setDeposit] = useState('')
+  const [pending, setPending] = useState(false)
   const [file, setFile] = useState<File | null>(null)
   const { addBid, activeBid } = useAuction()
   const [gweiPerSec, setGweiPerSec] = useState(activeBid?.gweiPerSec.toString() || '')
 
   const submit = async () => {
-    await addBid('', text, subtext, parseFloat(gweiPerSec), parseFloat(deposit), file)
-    onClose()
+    setPending(true)
+    try {
+      await addBid('', text, subtext, parseFloat(gweiPerSec), parseFloat(deposit), file)
+      onClose()
+    } catch (e) {
+      console.warn(e)
+    }
+    setPending(false)
   }
 
   return (
@@ -158,7 +165,7 @@ const SponsorList: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
       <ButtonWrapper>
         <Button cancel onClick={onClose}>Cancel</Button>
-        <Button onClick={submit}>Place bid</Button>
+        <Button disabled={pending} onClick={submit}>Place bid</Button>
       </ButtonWrapper>
     </section>
   );
