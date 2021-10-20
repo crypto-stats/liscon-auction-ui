@@ -4,7 +4,7 @@ import Providers from 'state/Providers'
 import Header from 'components/Header'
 import Button from 'components/Button'
 import ModeSelector from 'components/ModeSelector'
-import VideoWithOverlay from 'components/VideoWithOverlay'
+import TweetEmbed from 'react-tweet-embed'
 
 const Centered = styled.main`
   flex: 1;
@@ -44,6 +44,12 @@ const VideoContainer = styled.section`
   align-items: center;
   justify-content: center;
   flex: 1;
+
+  & > div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
 `
 
 export default function Home() {
@@ -54,7 +60,7 @@ export default function Home() {
       <Centered>
         <Header><h1>LisCon Live Stream</h1></Header>
         <VideoContainer>
-          <VideoWithOverlay />
+          <TweetEmbed id="1450742020331511813" />
         </VideoContainer>
         <Flex>
           <p>Place a bid and show your project or NFT in the stream.</p>
