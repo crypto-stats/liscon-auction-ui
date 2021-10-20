@@ -29,11 +29,21 @@ const SponsorLogo = styled.div`
 `
 
 const RightText = styled.div`
+  font-family: sans-serif;
   text-align: right;
-  margin-right: 4px;
+  margin-right: 12px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+`
+
+const Title = styled.div`
+  font-size: 24px;
+`
+
+const SubTitle = styled.div`
+  font-size: 18px;
+  color: #eee;
 `
 
 interface OverlayProps {
@@ -48,8 +58,8 @@ const Overlay: React.FC<OverlayProps> = ({ text, subtext, image }) => {
       <Logo />
       <Right>
         <RightText>
-          <div>{text}</div>
-          {subtext && <div>{subtext}</div>}
+          <Title>{text}</Title>
+          {subtext && <SubTitle>{subtext}</SubTitle>}
         </RightText>
 
         {image && (
