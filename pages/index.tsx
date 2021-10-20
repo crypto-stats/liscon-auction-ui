@@ -60,7 +60,7 @@ export default function Home() {
       <Centered>
         <Header><h1>LisCon Live Stream</h1></Header>
         <VideoContainer>
-          <TweetEmbed id="1450744032922066950" />
+          <TweetEmbed id="1450795630142623745" />
         </VideoContainer>
         <Flex>
           <p>Place a bid and show your project or NFT in the stream.</p>
