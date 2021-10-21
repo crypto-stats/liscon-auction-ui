@@ -4,7 +4,7 @@ import Providers from 'state/Providers'
 import Header from 'components/Header'
 import Button from 'components/Button'
 import ModeSelector from 'components/ModeSelector'
-import TweetEmbed from 'react-tweet-embed'
+import VideoPlayer from 'components/VideoPlayer'
 
 const Centered = styled.main`
   flex: 1;
@@ -60,7 +60,7 @@ export default function Home() {
       <Centered>
         <Header><h1>LisCon Live Stream</h1></Header>
         <VideoContainer>
-          <TweetEmbed id="1450795630142623745" />
+          <VideoPlayer />
         </VideoContainer>
         <Flex>
           <p>Place a bid and show your project or NFT in the stream.</p>

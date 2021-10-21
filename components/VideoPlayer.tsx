@@ -8,6 +8,7 @@ const Container = styled.div`
 
   & .player-container {
     height: 100%;
+    width: 100%;
   }
 `
 
@@ -29,7 +30,7 @@ const VideoPlayer: React.FC = ({ children }) => {
     <Container>
       <Overlay>{children}</Overlay>
       <YouTube
-        videoId="AdUw5RdyZxI"
+        videoId="fJi1sziKNTA"
         containerClassName="player-container"
         opts={{
           height: '100%',
