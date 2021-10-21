@@ -28,7 +28,7 @@ const Overlay = styled.div`
 const VideoPlayer: React.FC = ({ children }) => {
   return (
     <Container>
-      <Overlay>{children}</Overlay>
+      {children && <Overlay>{children}</Overlay>}
       <YouTube
         videoId="fJi1sziKNTA"
         containerClassName="player-container"

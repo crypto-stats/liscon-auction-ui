@@ -115,7 +115,7 @@ export default class Auction {
   }
 
   async swap(inactiveId: string, activeId: string) {
-    const tx = await this.auctionContract.swap(inactiveId, activeId)
+    const tx = await this.auctionContract.swap(inactiveId, activeId, { gasLimit: 2000000 })
     await tx.wait()
   }
 }
